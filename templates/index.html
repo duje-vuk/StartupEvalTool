@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startup Eval</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --surface: #131316;
+    --surface-hover: #1a1a1f;
+    --border: #222228;
+    --border-active: #3d3d45;
+    --text: #e8e6e3;
+    --text-muted: #8a8a8e;
+    --text-dim: #5a5a5e;
+    --accent: #c4f042;
+    --accent-dim: #8aab2e;
+    --red: #f04242;
+    --yellow: #f0c442;
+    --blue: #4287f0;
+    --purple: #c442f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .container { max-width: 720px; margin: 0 auto; padding: 20px 24px; }
+
+  /* Header */
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 20px; margin-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px; color: var(--accent);
+    letter-spacing: 2px; text-transform: uppercase; font-weight: 500;
+  }
+  .header .date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--text-dim); margin-top: 4px;
+  }
+  .header-actions { display: flex; gap: 8px; }
+
+  /* Buttons */
+  .btn {
+    padding: 8px 16px; background: transparent;
+    border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text-muted); font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn:hover { border-color: var(--border-active); color: var(--text); }
+  .btn-primary {
+    background: var(--accent); color: var(--bg);
+    border: none; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-primary:disabled {
+    background: var(--border); color: var(--text-dim); cursor: default;
+  }
+  .btn-big { padding: 14px 40px; font-size: 14px; }
+
+  /* Empty state */
+  .empty {
+    text-align: center; padding: 80px 0;
+  }
+  .empty .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+  .empty p { color: var(--text-muted); font-size: 15px; margin-bottom: 32px; }
+
+  /* Loading */
+  .loading { text-align: center; padding: 80px 0; }
+  .spinner {
+    width: 24px; height: 24px;
+    border: 2px solid var(--border);
+    border-top: 2px solid var(--accent);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading p { color: var(--text-muted); font-size: 14px; font-family: 'JetBrains Mono', monospace; }
+
+  /* Error */
+  .error {
+    padding: 16px; background: rgba(240,66,66,0.08);
+    border: 1px solid rgba(240,66,66,0.2); border-radius: 8px;
+    margin-bottom: 20px; font-size: 13px; color: var(--red);
+    font-family: 'JetBrains Mono', monospace;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .error button {
+    background: none; border: none; color: var(--red);
+    cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 16px;
+  }
+
+  /* Startup card */
+  .startup-index {
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    color: var(--text-dim); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 24px; margin-bottom: 2px;
+  }
+  .card-header {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; margin-bottom: 12px;
+  }
+  .card-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  .card-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px; color: var(--text);
+    margin: 6px 0 0; font-weight: 600; line-height: 1.3;
+  }
+  .card-link {
+    color: var(--text-dim); font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    text-decoration: none; padding: 4px 10px;
+    border: 1px solid var(--border); border-radius: 4px;
+    flex-shrink: 0; margin-left: 12px; white-space: nowrap;
+  }
+  .card-link:hover { border-color: var(--border-active); color: var(--text-muted); }
+  .card-summary {
+    color: var(--text-muted); font-size: 14px;
+    line-height: 1.6; margin-bottom: 16px;
+  }
+  .card-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .card-grid .full { grid-column: 1 / -1; }
+  .card-label {
+    font-size: 10px; font-family: 'JetBrains Mono', monospace;
+    color: var(--text-dim); letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .card-value { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+  /* Eval form */
+  .eval-form { 
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 24px;
+  }
+  .eval-title {
+    font-size: 10px; font-family: 'JetBrains Mono', monospace;
+    color: var(--accent); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 20px; font-weight: 600;
+  }
+  .field { margin-bottom: 20px; }
+  .field-label {
+    font-size: 12px; font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted); margin-bottom: 8px; letter-spacing: 0.5px;
+  }
+  .pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    padding: 8px 16px; border-radius: 6px; font-size: 13px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 500;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--text-muted); cursor: pointer; transition: all 0.15s;
+  }
+  .pill.active {
+    border-color: var(--accent); background: rgba(196,240,66,0.08);
+    color: var(--accent);
+  }
+  .pill:hover:not(.active) { border-color: var(--border-active); }
+  textarea {
+    width: 100%; padding: 12px 16px; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text); font-size: 14px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    outline: none; resize: vertical; line-height: 1.6;
+  }
+  textarea:focus { border-color: var(--border-active); }
+
+  /* Confidence dots */
+  .confidence-dots { display: flex; gap: 6px; }
+  .dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 2px solid var(--border); background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    font-weight: 600; color: var(--text-dim);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .dot.active {
+    background: var(--accent); border-color: var(--accent);
+    color: var(--bg);
+  }
+  .dot.readonly { cursor: default; }
+
+  /* Submitted eval summary */
+  .eval-summary .meta {
+    display: flex; gap: 16px; align-items: center;
+    margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .eval-summary .verdict {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 600;
+  }
+  .eval-summary .reasoning {
+    font-size: 13px; color: var(--text-muted); line-height: 1.6;
+  }
+
+  /* Risk badge */
+  .risk-badge {
+    display: inline-block; padding: 3px 10px; border-radius: 4px;
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    font-weight: 500; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .risk-market_size { color: var(--yellow); border: 1px solid var(--yellow); }
+  .risk-execution { color: var(--blue); border: 1px solid var(--blue); }
+  .risk-timing { color: var(--accent); border: 1px solid var(--accent); }
+  .risk-competition { color: var(--red); border: 1px solid var(--red); }
+  .risk-regulation { color: var(--purple); border: 1px solid var(--purple); }
+
+  /* Critique panel */
+  .critique {
+    background: var(--bg); border: 1px solid rgba(196,240,66,0.2);
+    border-radius: 8px; padding: 24px;
+    border-left: 3px solid var(--accent);
+  }
+  .critique-title {
+    font-size: 10px; font-family: 'JetBrains Mono', monospace;
+    color: var(--accent); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 16px; font-weight: 600;
+  }
+  .critique-verdict {
+    display: inline-block; padding: 4px 12px; border-radius: 4px;
+    font-size: 12px; font-family: 'JetBrains Mono', monospace;
+    font-weight: 600; margin-bottom: 16px;
+  }
+  .critique-verdict.agrees { background: rgba(196,240,66,0.12); color: var(--accent); }
+  .critique-verdict.disagrees { background: rgba(240,66,66,0.12); color: var(--red); }
+  .critique-body {
+    font-size: 14px; color: var(--text); line-height: 1.7; margin-bottom: 16px;
+  }
+  .critique-section-title {
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .critique-section-title.blindspots { color: var(--yellow); }
+  .critique-section-title.strongest { color: var(--accent); }
+  .blindspot-item {
+    font-size: 13px; color: var(--text-muted); line-height: 1.6;
+    padding: 6px 0; border-bottom: 1px solid var(--border);
+  }
+  .blindspot-item:last-child { border-bottom: none; }
+
+  /* Done bar */
+  .done-bar {
+    text-align: center; padding: 20px 0 60px;
+  }
+  .done-bar .summary {
+    font-size: 13px; font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted); margin-bottom: 16px;
+  }
+
+  /* History */
+  .history-date {
+    font-size: 12px; font-family: 'JetBrains Mono', monospace;
+    color: var(--accent); letter-spacing: 1px; margin-bottom: 12px;
+  }
+  .history-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px; margin-bottom: 8px;
+  }
+  .history-item-header {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 8px;
+  }
+  .history-item-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px; color: var(--text); font-weight: 600;
+  }
+  .history-item-verdicts { display: flex; gap: 8px; align-items: center; }
+  .history-item-verdicts span {
+    font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 600;
+  }
+
+  .startup-block { margin-bottom: 40px; }
+  .spacer-2 { height: 2px; }
+
+  @media (max-width: 600px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .container { padding: 16px; }
+    .pills { gap: 6px; }
+    .pill { padding: 6px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="app">
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1>Startup Eval</h1>
+      <div class="date" id="today-date"></div>
+    </div>
+    <div class="header-actions">
+      <button class="btn" onclick="showHistory()">History</button>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="error" id="error-bar" style="display:none">
+    <span id="error-msg"></span>
+    <button onclick="hideError()">✕</button>
+  </div>
+
+  <!-- Main content -->
+  <div id="main-view">
+    <!-- Empty state -->
+    <div class="empty" id="empty-state" style="display:none">
+      <div class="icon">◆</div>
+      <p>Fetch today's startups from Hacker News + YC</p>
+      <button class="btn btn-primary btn-big" onclick="fetchStartups()">Load Today's Startups</button>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" id="loading-state" style="display:none">
+      <div class="spinner"></div>
+      <p id="loading-msg">Fetching startups...</p>
+    </div>
+
+    <!-- Startups list -->
+    <div id="startups-list"></div>
+
+    <!-- Done bar -->
+    <div class="done-bar" id="done-bar" style="display:none">
+      <div class="summary" id="done-summary"></div>
+      <button class="btn" onclick="refetch()">Fetch New Batch</button>
+    </div>
+  </div>
+
+  <!-- History view -->
+  <div id="history-view" style="display:none">
+    <button class="btn" onclick="showMain()" style="margin-bottom:24px">← Back</button>
+    <div id="history-list"></div>
+  </div>
+</div>
+
+<script>
+// ─── State ──────────────────────────────────────────────────────────────────
+let startups = [];
+let evals = {};
+let critiques = {};
+
+// ─── Init ───────────────────────────────────────────────────────────────────
+document.getElementById('today-date').textContent =
+  new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+// Check for today's cached startups
+(async () => {
+  try {
+    const res = await fetch('/api/today');
+    const data = await res.json();
+    if (data.startups.length > 0) {
+      startups = data.startups;
+      data.startups.forEach((s, i) => {
+        if (s.eval) evals[i] = s.eval;
+        if (s.critique) critiques[i] = s.critique;
+      });
+      renderStartups();
+    } else {
+      show('empty-state');
+    }
+  } catch (e) {
+    show('empty-state');
+  }
+})();
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+function show(id) { document.getElementById(id).style.display = ''; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+function showError(msg) {
+  document.getElementById('error-msg').textContent = msg;
+  show('error-bar');
+}
+function hideError() { hide('error-bar'); }
+
+function showMain() {
+  show('main-view'); hide('history-view');
+}
+function showHistory() {
+  hide('main-view'); show('history-view');
+  loadHistory();
+}
+
+// ─── Fetch Startups ─────────────────────────────────────────────────────────
+async function fetchStartups() {
+  hide('empty-state');
+  show('loading-state');
+  document.getElementById('loading-msg').textContent = 'Fetching from HN + asking Groq to pick 3...';
+
+  try {
+    const res = await fetch('/api/fetch', { method: 'POST' });
+    if (!res.ok) throw new Error('Fetch failed: ' + res.status);
+    const data = await res.json();
+    startups = data.startups;
+    evals = {};
+    critiques = {};
+    hide('loading-state');
+    renderStartups();
+  } catch (e) {
+    hide('loading-state');
+    show('empty-state');
+    showError(e.message);
+  }
+}
+
+function refetch() {
+  document.getElementById('startups-list').innerHTML = '';
+  hide('done-bar');
+  fetchStartups();
+}
+
+// ─── Render Startups ────────────────────────────────────────────────────────
+function renderStartups() {
+  const container = document.getElementById('startups-list');
+  container.innerHTML = '';
+
+  startups.forEach((s, idx) => {
+    const block = document.createElement('div');
+    block.className = 'startup-block';
+    block.id = `startup-${idx}`;
+
+    let html = `
+      <div class="startup-index">${idx + 1} of ${startups.length}</div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-source">${esc(s.source)}</div>
+            <h3 class="card-name">${esc(s.name)}</h3>
+          </div>
+          ${s.url ? `<a href="${esc(s.url)}" target="_blank" class="card-link">↗ source</a>` : ''}
+        </div>
+        <div class="card-summary">${esc(s.summary)}</div>
+        <div class="card-grid">
+          <div>
+            <div class="card-label">Problem</div>
+            <div class="card-value">${esc(s.problem)}</div>
+          </div>
+          <div>
+            <div class="card-label">Business Model</div>
+            <div class="card-value">${esc(s.business_model)}</div>
+          </div>
+          <div class="full">
+            <div class="card-label">Key Bet</div>
+            <div class="card-value">${esc(s.key_bet)}</div>
+          </div>
+        </div>
+      </div>
+      <div class="spacer-2"></div>
+    `;
+
+    if (evals[idx]) {
+      html += renderEvalSummary(idx);
+      html += '<div class="spacer-2"></div>';
+      if (critiques[idx]) {
+        html += renderCritique(critiques[idx]);
+      }
+    } else {
+      html += renderEvalForm(idx);
+    }
+
+    block.innerHTML = html;
+    container.appendChild(block);
+  });
+
+  checkAllDone();
+}
+
+function renderEvalForm(idx) {
+  return `
+    <div class="eval-form" id="form-${idx}">
+      <div class="eval-title">Your Evaluation</div>
+
+      <div class="field">
+        <div class="field-label">Will it work?</div>
+        <div class="pills">
+          ${['yes','no','maybe'].map(v =>
+            `<button class="pill" data-field="will_work" data-idx="${idx}" data-val="${v}" onclick="setPill(this)">${v}</button>`
+          ).join('')}
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Why / why not?</div>
+        <textarea id="reasoning-${idx}" rows="4" placeholder="Your reasoning..."></textarea>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Biggest risk?</div>
+        <div class="pills">
+          ${['market_size','execution','timing','competition','regulation'].map(v =>
+            `<button class="pill" data-field="biggest_risk" data-idx="${idx}" data-val="${v}" onclick="setPill(this)">${v.replace('_',' ')}</button>`
+          ).join('')}
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Confidence</div>
+        <div class="confidence-dots" id="conf-${idx}">
+          ${[1,2,3,4,5].map(n =>
+            `<div class="dot" data-idx="${idx}" data-val="${n}" onclick="setConf(this)">${n}</div>`
+          ).join('')}
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Would you build it?</div>
+        <div class="pills">
+          ${['yes','no'].map(v =>
+            `<button class="pill" data-field="would_build" data-idx="${idx}" data-val="${v}" onclick="setPill(this)">${v}</button>`
+          ).join('')}
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;padding:14px 0" id="submit-${idx}" onclick="submitEval(${idx})" disabled>
+        Submit & Get Critique
+      </button>
+    </div>
+  `;
+}
+
+// ─── Form State ─────────────────────────────────────────────────────────────
+const formState = {};
+
+function getForm(idx) {
+  if (!formState[idx]) formState[idx] = { will_work:'', reasoning:'', biggest_risk:'', confidence:0, would_build:'' };
+  return formState[idx];
+}
+
+function setPill(el) {
+  const idx = el.dataset.idx;
+  const field = el.dataset.field;
+  const val = el.dataset.val;
+  getForm(idx)[field] = val;
+
+  // Update UI
+  el.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  checkSubmittable(idx);
+}
+
+function setConf(el) {
+  const idx = el.dataset.idx;
+  const val = parseInt(el.dataset.val);
+  getForm(idx).confidence = val;
+
+  el.parentElement.querySelectorAll('.dot').forEach(d => {
+    d.classList.toggle('active', parseInt(d.dataset.val) <= val);
+  });
+  checkSubmittable(idx);
+}
+
+function checkSubmittable(idx) {
+  const f = getForm(idx);
+  const reasoning = document.getElementById(`reasoning-${idx}`)?.value?.trim() || '';
+  f.reasoning = reasoning;
+  const ok = f.will_work && reasoning && f.biggest_risk && f.confidence > 0 && f.would_build;
+  const btn = document.getElementById(`submit-${idx}`);
+  if (btn) btn.disabled = !ok;
+}
+
+// Listen for textarea changes
+document.addEventListener('input', (e) => {
+  if (e.target.tagName === 'TEXTAREA' && e.target.id.startsWith('reasoning-')) {
+    const idx = e.target.id.split('-')[1];
+    checkSubmittable(idx);
+  }
+});
+
+// ─── Submit Eval ────────────────────────────────────────────────────────────
+async function submitEval(idx) {
+  const f = getForm(idx);
+  f.reasoning = document.getElementById(`reasoning-${idx}`).value.trim();
+
+  const btn = document.getElementById(`submit-${idx}`);
+  btn.disabled = true;
+  btn.textContent = 'Generating critique...';
+
+  try {
+    const res = await fetch('/api/eval', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        startup_id: startups[idx].id,
+        will_work: f.will_work,
+        reasoning: f.reasoning,
+        biggest_risk: f.biggest_risk,
+        confidence: f.confidence,
+        would_build: f.would_build,
+      }),
+    });
+    if (!res.ok) throw new Error('Submit failed');
+    const data = await res.json();
+
+    evals[idx] = f;
+    critiques[idx] = data.critique;
+    renderStartups();
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = 'Submit & Get Critique';
+    showError(e.message);
+  }
+}
+
+// ─── Render Results ─────────────────────────────────────────────────────────
+function renderEvalSummary(idx) {
+  const ev = evals[idx];
+  const verdictColor = ev.will_work === 'yes' ? 'var(--accent)' : ev.will_work === 'no' ? 'var(--red)' : 'var(--yellow)';
+  const buildColor = ev.would_build === 'yes' ? 'var(--accent)' : 'var(--text-dim)';
+
+  return `
+    <div class="card eval-summary">
+      <div class="eval-title">Your Eval</div>
+      <div class="meta">
+        <span class="verdict" style="color:${verdictColor}">Will work: ${ev.will_work}</span>
+        <span class="risk-badge risk-${ev.biggest_risk}">${(ev.biggest_risk||'').replace('_',' ')}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim)">
+          Confidence: ${ev.confidence}/5
+        </span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:${buildColor}">
+          Would build: ${ev.would_build}
+        </span>
+      </div>
+      <div class="reasoning">${esc(ev.reasoning)}</div>
+    </div>
+  `;
+}
+
+function renderCritique(c) {
+  const agreesClass = c.agrees ? 'agrees' : 'disagrees';
+  const agreesText = c.agrees ? 'AGREES' : 'DISAGREES';
+  const blindspots = (c.blind_spots || []).map(b =>
+    `<div class="blindspot-item">→ ${esc(b)}</div>`
+  ).join('');
+
+  return `
+    <div class="critique">
+      <div class="critique-title">AI Critique</div>
+      <div class="critique-verdict ${agreesClass}">${agreesText} — ${esc(c.verdict || '')}</div>
+      <div class="critique-body">${esc(c.main_argument || '')}</div>
+      ${blindspots ? `
+        <div style="margin-bottom:16px">
+          <div class="critique-section-title blindspots">Blind Spots in Your Reasoning</div>
+          ${blindspots}
+        </div>
+      ` : ''}
+      ${c.strongest_point ? `
+        <div>
+          <div class="critique-section-title strongest">Strongest Point in Your Eval</div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.6">${esc(c.strongest_point)}</div>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function checkAllDone() {
+  const allEvaled = startups.length > 0 && Object.keys(critiques).length === startups.length;
+  if (allEvaled) {
+    const disagreements = Object.values(critiques).filter(c => !c.agrees).length;
+    document.getElementById('done-summary').textContent =
+      `All done for today. ${disagreements} disagreement${disagreements !== 1 ? 's' : ''} with the AI.`;
+    show('done-bar');
+  } else {
+    hide('done-bar');
+  }
+}
+
+// ─── History ────────────────────────────────────────────────────────────────
+async function loadHistory() {
+  const container = document.getElementById('history-list');
+  container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading history...</p></div>';
+
+  try {
+    const res = await fetch('/api/history');
+    const data = await res.json();
+    
+    if (!data.sessions || data.sessions.length === 0) {
+      container.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px 0">No past evaluations yet.</p>';
+      return;
+    }
+
+    container.innerHTML = data.sessions.map(session => `
+      <div style="margin-bottom:32px">
+        <div class="history-date">${session.date}</div>
+        ${session.startups.map(s => {
+          const ev = s.eval;
+          const cr = s.critique;
+          const verdictColor = ev?.will_work === 'yes' ? 'var(--accent)' : ev?.will_work === 'no' ? 'var(--red)' : 'var(--yellow)';
+          return `
+            <div class="history-item">
+              <div class="history-item-header">
+                <span class="history-item-name">${esc(s.name)}</span>
+                <div class="history-item-verdicts">
+                  ${ev ? `<span style="color:${verdictColor}">You: ${ev.will_work}</span>` : ''}
+                  ${cr ? `<span style="color:${cr.agrees ? 'var(--accent)' : 'var(--red)'}">AI: ${cr.agrees ? 'agrees' : 'disagrees'}</span>` : ''}
+                </div>
+              </div>
+              ${ev ? `<p style="font-size:13px;color:var(--text-muted);line-height:1.5">${esc(ev.reasoning)}</p>` : ''}
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `).join('');
+  } catch (e) {
+    container.innerHTML = `<p style="color:var(--red)">Failed to load history: ${esc(e.message)}</p>`;
+  }
+}
+
+// ─── Escape HTML ────────────────────────────────────────────────────────────
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+</script>
+
+</body>
+</html>
