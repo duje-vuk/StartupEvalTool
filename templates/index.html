@@ -4,23 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Startup Eval</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0b;
-    --surface: #131316;
-    --surface-hover: #1a1a1f;
-    --border: #222228;
-    --border-active: #3d3d45;
-    --text: #e8e6e3;
-    --text-muted: #8a8a8e;
-    --text-dim: #5a5a5e;
-    --accent: #c4f042;
-    --accent-dim: #8aab2e;
-    --red: #f04242;
-    --yellow: #f0c442;
-    --blue: #4287f0;
-    --purple: #c442f0;
+    --bg: #f5f5f0;
+    --surface: #ffffff;
+    --surface-hover: #faf8f5;
+    --border: #e0ddd5;
+    --border-active: #c0bdb5;
+    --text: #1a1a1a;
+    --text-muted: #6b6b6b;
+    --text-dim: #999999;
+    --accent: #FF6600;
+    --accent-dim: #cc5200;
+    --green: #16a34a;
+    --red: #dc3545;
+    --yellow: #e8a317;
+    --blue: #2563eb;
+    --purple: #7c3aed;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,28 +29,24 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     min-height: 100vh;
     line-height: 1.6;
   }
 
-  .mono { font-family: 'JetBrains Mono', monospace; }
-  .container { max-width: 720px; margin: 0 auto; padding: 20px 24px; }
+  .container { max-width: 600px; margin: 0 auto; padding: 20px 24px; }
 
   /* Header */
   .header {
     display: flex; justify-content: space-between; align-items: center;
-    padding-bottom: 20px; margin-bottom: 32px;
+    padding-bottom: 16px; margin-bottom: 24px;
     border-bottom: 1px solid var(--border);
   }
   .header h1 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px; color: var(--accent);
-    letter-spacing: 2px; text-transform: uppercase; font-weight: 500;
+    font-size: 18px; color: var(--accent); font-weight: 700;
   }
   .header .date {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px; color: var(--text-dim); margin-top: 4px;
+    font-size: 13px; color: var(--text-muted); margin-top: 2px;
   }
   .header-actions { display: flex; gap: 8px; }
 
@@ -57,26 +54,50 @@
   .btn {
     padding: 8px 16px; background: transparent;
     border: 1px solid var(--border); border-radius: 6px;
-    color: var(--text-muted); font-size: 12px;
-    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted); font-size: 13px;
+    font-family: 'Inter', sans-serif; font-weight: 500;
     cursor: pointer; transition: all 0.15s;
   }
   .btn:hover { border-color: var(--border-active); color: var(--text); }
   .btn-primary {
-    background: var(--accent); color: var(--bg);
-    border: none; font-weight: 600; letter-spacing: 1px;
-    text-transform: uppercase;
+    background: var(--accent); color: #ffffff;
+    border: none; font-weight: 600;
   }
   .btn-primary:hover { opacity: 0.9; }
   .btn-primary:disabled {
     background: var(--border); color: var(--text-dim); cursor: default;
   }
-  .btn-big { padding: 14px 40px; font-size: 14px; }
+  .btn-big { padding: 14px 40px; font-size: 15px; }
+
+  /* Progress bar */
+  .progress-bar {
+    display: flex; justify-content: center; align-items: center;
+    gap: 12px; margin-bottom: 24px;
+  }
+  .progress-dot {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid var(--border); background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: var(--text-dim);
+    cursor: pointer; transition: all 0.2s; position: relative;
+  }
+  .progress-dot.active {
+    border-color: var(--accent); color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255,102,0,0.15);
+  }
+  .progress-dot.done {
+    border-color: var(--green); background: var(--green); color: #fff;
+  }
+  .progress-dot.done::after {
+    content: ''; display: none;
+  }
+  .progress-line {
+    width: 40px; height: 2px; background: var(--border); border-radius: 1px;
+  }
+  .progress-line.done { background: var(--green); }
 
   /* Empty state */
-  .empty {
-    text-align: center; padding: 80px 0;
-  }
+  .empty { text-align: center; padding: 80px 0; }
   .empty .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
   .empty p { color: var(--text-muted); font-size: 15px; margin-bottom: 32px; }
 
@@ -91,138 +112,127 @@
     animation: spin 1s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .loading p { color: var(--text-muted); font-size: 14px; font-family: 'JetBrains Mono', monospace; }
+  .loading p { color: var(--text-muted); font-size: 14px; }
+  .loading-timer { color: var(--text-dim); font-size: 12px; margin-top: 8px; }
 
   /* Error */
   .error {
-    padding: 16px; background: rgba(240,66,66,0.08);
-    border: 1px solid rgba(240,66,66,0.2); border-radius: 8px;
+    padding: 16px; background: rgba(220,53,69,0.06);
+    border: 1px solid rgba(220,53,69,0.2); border-radius: 8px;
     margin-bottom: 20px; font-size: 13px; color: var(--red);
-    font-family: 'JetBrains Mono', monospace;
     display: flex; justify-content: space-between; align-items: center;
   }
   .error button {
     background: none; border: none; color: var(--red);
-    cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 16px;
+    cursor: pointer; font-size: 16px;
   }
 
-  /* Startup card */
-  .startup-index {
-    font-size: 11px; font-family: 'JetBrains Mono', monospace;
-    color: var(--text-dim); letter-spacing: 2px;
-    text-transform: uppercase; margin-bottom: 8px;
-  }
+  /* Card */
   .card {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 24px; margin-bottom: 2px;
+    border-radius: 12px; padding: 24px; margin-bottom: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
   }
   .card-header {
     display: flex; align-items: flex-start;
     justify-content: space-between; margin-bottom: 12px;
   }
   .card-source {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; color: var(--text-dim);
-    letter-spacing: 2px; text-transform: uppercase;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
   }
   .card-name {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 18px; color: var(--text);
-    margin: 6px 0 0; font-weight: 600; line-height: 1.3;
+    font-size: 22px; color: var(--text);
+    margin: 4px 0 0; font-weight: 700; line-height: 1.3;
   }
   .card-link {
-    color: var(--text-dim); font-size: 12px;
-    font-family: 'JetBrains Mono', monospace;
-    text-decoration: none; padding: 4px 10px;
-    border: 1px solid var(--border); border-radius: 4px;
-    flex-shrink: 0; margin-left: 12px; white-space: nowrap;
+    color: var(--text-dim); font-size: 13px;
+    text-decoration: none; padding: 6px 12px;
+    border: 1px solid var(--border); border-radius: 6px;
+    flex-shrink: 0; margin-left: 12px; white-space: nowrap; font-weight: 500;
   }
-  .card-link:hover { border-color: var(--border-active); color: var(--text-muted); }
+  .card-link:hover { border-color: var(--accent); color: var(--accent); }
   .card-summary {
-    color: var(--text-muted); font-size: 14px;
+    color: var(--text-muted); font-size: 15px;
     line-height: 1.6; margin-bottom: 16px;
   }
   .card-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
   }
   .card-grid .full { grid-column: 1 / -1; }
   .card-label {
-    font-size: 10px; font-family: 'JetBrains Mono', monospace;
-    color: var(--text-dim); letter-spacing: 1px;
-    text-transform: uppercase; margin-bottom: 4px;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 3px; font-weight: 600;
   }
-  .card-value { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .card-value { font-size: 14px; color: var(--text); line-height: 1.5; }
 
   /* Eval form */
-  .eval-form { 
+  .eval-form {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 24px;
+    border-radius: 12px; padding: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    animation: fadeIn 0.25s ease;
   }
   .eval-title {
-    font-size: 10px; font-family: 'JetBrains Mono', monospace;
-    color: var(--accent); letter-spacing: 2px;
-    text-transform: uppercase; margin-bottom: 20px; font-weight: 600;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 20px; font-weight: 700;
   }
-  .field { margin-bottom: 20px; }
+  .field { margin-bottom: 18px; }
   .field-label {
-    font-size: 12px; font-family: 'JetBrains Mono', monospace;
-    color: var(--text-muted); margin-bottom: 8px; letter-spacing: 0.5px;
+    font-size: 14px; color: var(--text);
+    margin-bottom: 8px; font-weight: 600;
   }
   .pills { display: flex; gap: 8px; flex-wrap: wrap; }
   .pill {
-    padding: 8px 16px; border-radius: 6px; font-size: 13px;
-    font-family: 'JetBrains Mono', monospace; font-weight: 500;
-    border: 1px solid var(--border); background: transparent;
-    color: var(--text-muted); cursor: pointer; transition: all 0.15s;
+    padding: 8px 18px; border-radius: 8px; font-size: 14px;
+    font-weight: 500; border: 1px solid var(--border);
+    background: transparent; color: var(--text-muted);
+    cursor: pointer; transition: all 0.15s;
   }
   .pill.active {
-    border-color: var(--accent); background: rgba(196,240,66,0.08);
+    border-color: var(--accent); background: rgba(255,102,0,0.08);
     color: var(--accent);
   }
   .pill:hover:not(.active) { border-color: var(--border-active); }
   textarea {
-    width: 100%; padding: 12px 16px; background: var(--bg);
-    border: 1px solid var(--border); border-radius: 6px;
-    color: var(--text); font-size: 14px;
-    font-family: 'IBM Plex Sans', sans-serif;
+    width: 100%; padding: 12px 16px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-size: 15px;
+    font-family: 'Inter', sans-serif;
     outline: none; resize: vertical; line-height: 1.6;
   }
-  textarea:focus { border-color: var(--border-active); }
+  textarea:focus { border-color: var(--accent); }
 
   /* Confidence dots */
-  .confidence-dots { display: flex; gap: 6px; }
+  .confidence-dots { display: flex; gap: 8px; }
   .dot {
-    width: 28px; height: 28px; border-radius: 50%;
+    width: 32px; height: 32px; border-radius: 50%;
     border: 2px solid var(--border); background: transparent;
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-family: 'JetBrains Mono', monospace;
-    font-weight: 600; color: var(--text-dim);
+    font-size: 13px; font-weight: 600; color: var(--text-dim);
     cursor: pointer; transition: all 0.15s;
   }
   .dot.active {
-    background: var(--accent); border-color: var(--accent);
-    color: var(--bg);
+    background: var(--accent); border-color: var(--accent); color: #fff;
   }
-  .dot.readonly { cursor: default; }
 
-  /* Submitted eval summary */
+  /* Eval summary */
   .eval-summary .meta {
-    display: flex; gap: 16px; align-items: center;
+    display: flex; gap: 14px; align-items: center;
     margin-bottom: 12px; flex-wrap: wrap;
   }
-  .eval-summary .verdict {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px; font-weight: 600;
-  }
+  .eval-summary .verdict { font-size: 14px; font-weight: 600; }
   .eval-summary .reasoning {
-    font-size: 13px; color: var(--text-muted); line-height: 1.6;
+    font-size: 14px; color: var(--text-muted); line-height: 1.6;
   }
 
   /* Risk badge */
   .risk-badge {
     display: inline-block; padding: 3px 10px; border-radius: 4px;
-    font-size: 11px; font-family: 'JetBrains Mono', monospace;
-    font-weight: 500; text-transform: uppercase; letter-spacing: 1px;
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
   }
   .risk-market_size { color: var(--yellow); border: 1px solid var(--yellow); }
   .risk-execution { color: var(--blue); border: 1px solid var(--blue); }
@@ -230,85 +240,160 @@
   .risk-competition { color: var(--red); border: 1px solid var(--red); }
   .risk-regulation { color: var(--purple); border: 1px solid var(--purple); }
 
-  /* Critique panel */
+  /* Critique */
   .critique {
-    background: var(--bg); border: 1px solid rgba(196,240,66,0.2);
-    border-radius: 8px; padding: 24px;
+    background: var(--surface); border: 1px solid rgba(255,102,0,0.2);
+    border-radius: 12px; padding: 24px;
     border-left: 3px solid var(--accent);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    animation: slideIn 0.3s ease;
   }
   .critique-title {
-    font-size: 10px; font-family: 'JetBrains Mono', monospace;
-    color: var(--accent); letter-spacing: 2px;
-    text-transform: uppercase; margin-bottom: 16px; font-weight: 600;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 14px; font-weight: 700;
   }
   .critique-verdict {
-    display: inline-block; padding: 4px 12px; border-radius: 4px;
-    font-size: 12px; font-family: 'JetBrains Mono', monospace;
-    font-weight: 600; margin-bottom: 16px;
+    display: inline-block; padding: 4px 12px; border-radius: 6px;
+    font-size: 13px; font-weight: 600; margin-bottom: 14px;
   }
-  .critique-verdict.agrees { background: rgba(196,240,66,0.12); color: var(--accent); }
-  .critique-verdict.disagrees { background: rgba(240,66,66,0.12); color: var(--red); }
+  .critique-verdict.agrees { background: rgba(22,163,74,0.1); color: var(--green); }
+  .critique-verdict.disagrees { background: rgba(220,53,69,0.08); color: var(--red); }
   .critique-body {
-    font-size: 14px; color: var(--text); line-height: 1.7; margin-bottom: 16px;
+    font-size: 15px; color: var(--text); line-height: 1.7; margin-bottom: 16px;
   }
   .critique-section-title {
-    font-size: 11px; font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+    font-size: 11px; letter-spacing: 0.5px;
+    text-transform: uppercase; margin-bottom: 6px; font-weight: 700;
   }
   .critique-section-title.blindspots { color: var(--yellow); }
-  .critique-section-title.strongest { color: var(--accent); }
+  .critique-section-title.strongest { color: var(--green); }
   .blindspot-item {
-    font-size: 13px; color: var(--text-muted); line-height: 1.6;
+    font-size: 14px; color: var(--text-muted); line-height: 1.6;
     padding: 6px 0; border-bottom: 1px solid var(--border);
   }
   .blindspot-item:last-child { border-bottom: none; }
 
-  /* Done bar */
-  .done-bar {
-    text-align: center; padding: 20px 0 60px;
+  /* Nav row */
+  .nav-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 20px; padding-top: 16px;
   }
-  .done-bar .summary {
-    font-size: 13px; font-family: 'JetBrains Mono', monospace;
-    color: var(--text-muted); margin-bottom: 16px;
+  .nav-row .btn { min-width: 100px; text-align: center; }
+
+  /* Done screen */
+  .done-screen {
+    text-align: center; padding: 40px 0;
+    animation: fadeIn 0.3s ease;
+  }
+  .done-screen h2 {
+    font-size: 24px; font-weight: 700; color: var(--text);
+    margin-bottom: 8px;
+  }
+  .done-screen .subtitle {
+    font-size: 15px; color: var(--text-muted); margin-bottom: 32px;
+  }
+  .done-summary-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px; margin-bottom: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    text-align: left;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .done-summary-card .name { font-weight: 600; font-size: 15px; }
+  .done-summary-card .verdicts {
+    display: flex; gap: 12px; font-size: 12px; font-weight: 600;
+  }
+  .done-actions {
+    display: flex; gap: 12px; justify-content: center; margin-top: 28px;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card-animate { animation: fadeIn 0.25s ease; }
+
+  /* Inline spinner */
+  .spinner-inline {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    display: inline-block;
+    animation: spin 1s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
   }
 
   /* History */
   .history-date {
-    font-size: 12px; font-family: 'JetBrains Mono', monospace;
-    color: var(--accent); letter-spacing: 1px; margin-bottom: 12px;
+    font-size: 13px; color: var(--accent);
+    letter-spacing: 0.5px; margin-bottom: 10px; font-weight: 700;
   }
   .history-item {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 20px; margin-bottom: 8px;
+    border-radius: 10px; padding: 16px; margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   }
   .history-item-header {
     display: flex; justify-content: space-between;
-    align-items: center; margin-bottom: 8px;
+    align-items: center; margin-bottom: 6px;
   }
-  .history-item-name {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 15px; color: var(--text); font-weight: 600;
-  }
+  .history-item-name { font-size: 15px; color: var(--text); font-weight: 600; }
   .history-item-verdicts { display: flex; gap: 8px; align-items: center; }
-  .history-item-verdicts span {
-    font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 600;
+  .history-item-verdicts span { font-size: 11px; font-weight: 600; }
+
+  /* Filters */
+  .filter-bar {
+    margin-bottom: 20px; display: flex;
+    flex-direction: column; gap: 12px;
   }
+  .filter-bar input {
+    width: 100%; padding: 10px 16px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text);
+    font-size: 13px; font-family: 'Inter', sans-serif; outline: none;
+  }
+  .filter-bar input:focus { border-color: var(--accent); }
+  .filter-bar input::placeholder { color: var(--text-dim); }
+  .filter-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .filter-label {
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-right: 4px; font-weight: 600;
+  }
+  .filter-pill {
+    padding: 5px 12px; border-radius: 4px;
+    font-size: 11px; font-weight: 500;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--text-muted); cursor: pointer; transition: all 0.15s;
+  }
+  .filter-pill.active {
+    border-color: var(--accent);
+    background: rgba(255,102,0,0.08); color: var(--accent);
+  }
+  .filter-pill:hover:not(.active) { border-color: var(--border-active); }
 
-  .startup-block { margin-bottom: 40px; }
-  .spacer-2 { height: 2px; }
-
-  @media (max-width: 600px) {
-    .card-grid { grid-template-columns: 1fr; }
+  @media (max-width: 640px) {
     .container { padding: 16px; }
+    .card-grid { grid-template-columns: 1fr; }
     .pills { gap: 6px; }
-    .pill { padding: 6px 12px; font-size: 12px; }
+    .pill { padding: 6px 12px; font-size: 13px; }
+    .card-name { font-size: 18px; }
+    .done-summary-card { flex-direction: column; gap: 8px; }
+    .done-summary-card .verdicts { justify-content: flex-start; }
   }
 </style>
 </head>
 <body>
 
 <div class="container" id="app">
-  <!-- Header -->
   <div class="header">
     <div>
       <h1>Startup Eval</h1>
@@ -319,40 +404,53 @@
     </div>
   </div>
 
-  <!-- Error -->
   <div class="error" id="error-bar" style="display:none">
     <span id="error-msg"></span>
-    <button onclick="hideError()">✕</button>
+    <button onclick="hideError()">&#10005;</button>
   </div>
 
-  <!-- Main content -->
   <div id="main-view">
-    <!-- Empty state -->
     <div class="empty" id="empty-state" style="display:none">
-      <div class="icon">◆</div>
+      <div class="icon">&#9670;</div>
       <p>Fetch today's startups from Hacker News + YC</p>
       <button class="btn btn-primary btn-big" onclick="fetchStartups()">Load Today's Startups</button>
     </div>
 
-    <!-- Loading -->
     <div class="loading" id="loading-state" style="display:none">
       <div class="spinner"></div>
       <p id="loading-msg">Fetching startups...</p>
+      <p class="loading-timer" id="loading-timer"></p>
     </div>
 
-    <!-- Startups list -->
-    <div id="startups-list"></div>
-
-    <!-- Done bar -->
-    <div class="done-bar" id="done-bar" style="display:none">
-      <div class="summary" id="done-summary"></div>
-      <button class="btn" onclick="refetch()">Fetch New Batch</button>
-    </div>
+    <div id="progress-bar" class="progress-bar" style="display:none"></div>
+    <div id="card-stack"></div>
+    <div id="done-screen" style="display:none"></div>
   </div>
 
-  <!-- History view -->
   <div id="history-view" style="display:none">
-    <button class="btn" onclick="showMain()" style="margin-bottom:24px">← Back</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <button class="btn" onclick="showMain()">&#8592; Back</button>
+      <button class="btn" id="export-btn" onclick="exportCSV()" style="display:none">Export CSV</button>
+    </div>
+    <div class="filter-bar" id="history-filters" style="display:none">
+      <input type="text" id="history-search" placeholder="Search startups..." oninput="applyHistoryFilters()">
+      <div class="filter-row">
+        <span class="filter-label">Risk:</span>
+        <button class="filter-pill" data-filter="risk" data-val="market_size" onclick="toggleFilter(this)">market size</button>
+        <button class="filter-pill" data-filter="risk" data-val="execution" onclick="toggleFilter(this)">execution</button>
+        <button class="filter-pill" data-filter="risk" data-val="timing" onclick="toggleFilter(this)">timing</button>
+        <button class="filter-pill" data-filter="risk" data-val="competition" onclick="toggleFilter(this)">competition</button>
+        <button class="filter-pill" data-filter="risk" data-val="regulation" onclick="toggleFilter(this)">regulation</button>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">AI:</span>
+        <button class="filter-pill" data-filter="agrees" data-val="yes" onclick="toggleFilter(this)">agrees</button>
+        <button class="filter-pill" data-filter="agrees" data-val="no" onclick="toggleFilter(this)">disagrees</button>
+      </div>
+      <div class="filter-row">
+        <button class="btn" onclick="clearHistoryFilters()" style="font-size:11px;padding:5px 12px">Clear filters</button>
+      </div>
+    </div>
     <div id="history-list"></div>
   </div>
 </div>
@@ -362,12 +460,83 @@
 let startups = [];
 let evals = {};
 let critiques = {};
+let currentIdx = 0;
+let historyData = [];
+const todayStr = new Date().toISOString().slice(0, 10);
+const BATCH_KEY = `startup-eval-draft-${todayStr}`;
+
+// ─── Draft Autosave ────────────────────────────────────────────────────────
+function saveDrafts() {
+  const toSave = {};
+  for (const idx in formState) {
+    const sid = startups[idx]?.id;
+    if (sid && !evals[idx]) toSave[sid] = formState[idx];
+  }
+  localStorage.setItem(BATCH_KEY, JSON.stringify(toSave));
+}
+
+function loadDrafts() {
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('startup-eval-draft-') && key !== BATCH_KEY) {
+      localStorage.removeItem(key);
+    }
+  }
+  try {
+    const raw = localStorage.getItem(BATCH_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    startups.forEach((s, idx) => {
+      if (saved[s.id] && !evals[idx]) {
+        formState[idx] = saved[s.id];
+      }
+    });
+  } catch (e) { /* ignore */ }
+}
+
+function restoreDrafts() {
+  const idx = currentIdx;
+  if (evals[idx] || !formState[idx]) return;
+  const f = formState[idx];
+  ['will_work', 'biggest_risk', 'would_build'].forEach(field => {
+    if (f[field]) {
+      const pill = document.querySelector(`.pill[data-idx="${idx}"][data-field="${field}"][data-val="${f[field]}"]`);
+      if (pill) { pill.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); pill.classList.add('active'); }
+    }
+  });
+  if (f.confidence > 0) {
+    const dots = document.querySelectorAll(`#conf-${idx} .dot`);
+    dots.forEach(d => d.classList.toggle('active', parseInt(d.dataset.val) <= f.confidence));
+  }
+  if (f.reasoning) {
+    const ta = document.getElementById(`reasoning-${idx}`);
+    if (ta) ta.value = f.reasoning;
+  }
+  checkSubmittable(idx);
+}
+
+// ─── Loading Timer ─────────────────────────────────────────────────────────
+let loadingInterval = null;
+function startLoadingTimer(elementId, estimateSec) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  const start = Date.now();
+  el.textContent = `~${estimateSec}s estimated`;
+  loadingInterval = setInterval(() => {
+    const elapsed = Math.round((Date.now() - start) / 1000);
+    el.textContent = `${elapsed}s elapsed`;
+  }, 1000);
+}
+function stopLoadingTimer() {
+  if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; }
+  const el = document.getElementById('loading-timer');
+  if (el) el.textContent = '';
+}
 
 // ─── Init ───────────────────────────────────────────────────────────────────
 document.getElementById('today-date').textContent =
   new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
-// Check for today's cached startups
 (async () => {
   try {
     const res = await fetch('/api/today');
@@ -378,7 +547,11 @@ document.getElementById('today-date').textContent =
         if (s.eval) evals[i] = s.eval;
         if (s.critique) critiques[i] = s.critique;
       });
-      renderStartups();
+      loadDrafts();
+      // Start at first unevaluated, or 0
+      currentIdx = startups.findIndex((_, i) => !critiques[i]);
+      if (currentIdx === -1) currentIdx = 0;
+      showCardView();
     } else {
       show('empty-state');
     }
@@ -404,11 +577,182 @@ function showHistory() {
   loadHistory();
 }
 
+// ─── Card View ──────────────────────────────────────────────────────────────
+function showCardView() {
+  const allDone = startups.length > 0 && Object.keys(critiques).length === startups.length;
+  if (allDone) {
+    hide('progress-bar');
+    document.getElementById('card-stack').innerHTML = '';
+    renderDoneScreen();
+    return;
+  }
+  show('progress-bar');
+  hide('done-screen');
+  renderProgress();
+  renderCurrentCard();
+}
+
+function renderProgress() {
+  const bar = document.getElementById('progress-bar');
+  let html = '';
+  startups.forEach((s, i) => {
+    const isDone = !!critiques[i];
+    const isActive = i === currentIdx;
+    let cls = 'progress-dot';
+    if (isDone) cls += ' done';
+    else if (isActive) cls += ' active';
+    html += `<div class="${cls}" onclick="goTo(${i})">${isDone ? '&#10003;' : (i + 1)}</div>`;
+    if (i < startups.length - 1) {
+      html += `<div class="progress-line${isDone && critiques[i+1] ? ' done' : (isDone ? ' done' : '')}"></div>`;
+    }
+  });
+  bar.innerHTML = html;
+}
+
+function renderCurrentCard() {
+  const container = document.getElementById('card-stack');
+  const idx = currentIdx;
+  const s = startups[idx];
+
+  let html = `<div class="card-animate">`;
+
+  html += `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-source">${esc(s.source)}</div>
+          <h3 class="card-name">${esc(s.name)}</h3>
+        </div>
+        ${s.url ? `<a href="${esc(s.url)}" target="_blank" class="card-link">&#8599; source</a>` : ''}
+      </div>
+      <div class="card-summary">${esc(s.summary)}</div>
+      <div class="card-grid">
+        <div>
+          <div class="card-label">Problem</div>
+          <div class="card-value">${esc(s.problem)}</div>
+        </div>
+        <div>
+          <div class="card-label">Business Model</div>
+          <div class="card-value">${esc(s.business_model)}</div>
+        </div>
+        <div class="full">
+          <div class="card-label">Key Bet</div>
+          <div class="card-value">${esc(s.key_bet)}</div>
+        </div>
+      </div>
+    </div>
+    <div style="height:4px"></div>
+  `;
+
+  if (evals[idx]) {
+    html += renderEvalSummary(idx);
+    if (critiques[idx]) {
+      html += '<div style="height:4px"></div>';
+      html += renderCritique(critiques[idx]);
+    }
+  } else {
+    html += renderEvalForm(idx);
+  }
+
+  // Navigation
+  html += `<div class="nav-row">`;
+  if (idx > 0) {
+    html += `<button class="btn" onclick="goPrev()">&#8592; Previous</button>`;
+  } else {
+    html += `<div></div>`;
+  }
+  if (critiques[idx] || evals[idx]) {
+    if (idx < startups.length - 1) {
+      html += `<button class="btn btn-primary" onclick="goNext()">Next &#8594;</button>`;
+    } else {
+      const allDone = Object.keys(critiques).length === startups.length;
+      if (allDone) {
+        html += `<button class="btn btn-primary" onclick="showCardView()">See Results</button>`;
+      } else {
+        html += `<div></div>`;
+      }
+    }
+  } else {
+    html += `<div></div>`;
+  }
+  html += `</div>`;
+
+  html += `</div>`;
+  container.innerHTML = html;
+  restoreDrafts();
+}
+
+function goNext() {
+  if (currentIdx < startups.length - 1) {
+    currentIdx++;
+    showCardView();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function goPrev() {
+  if (currentIdx > 0) {
+    currentIdx--;
+    showCardView();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function goTo(idx) {
+  if (idx >= 0 && idx < startups.length) {
+    currentIdx = idx;
+    showCardView();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+// ─── Done Screen ────────────────────────────────────────────────────────────
+function renderDoneScreen() {
+  const el = document.getElementById('done-screen');
+  const agreements = Object.values(critiques).filter(c => c.agrees).length;
+  const disagreements = startups.length - agreements;
+
+  let html = `
+    <div class="done-screen">
+      <h2>All done for today</h2>
+      <p class="subtitle">${agreements} agreement${agreements !== 1 ? 's' : ''}, ${disagreements} disagreement${disagreements !== 1 ? 's' : ''} with the AI</p>
+  `;
+
+  startups.forEach((s, i) => {
+    const ev = evals[i];
+    const cr = critiques[i];
+    const verdictColor = ev?.will_work === 'yes' ? 'var(--green)' : ev?.will_work === 'no' ? 'var(--red)' : 'var(--yellow)';
+    const aiColor = cr?.agrees ? 'var(--green)' : 'var(--red)';
+    html += `
+      <div class="done-summary-card" style="cursor:pointer" onclick="goTo(${i})">
+        <span class="name">${esc(s.name)}</span>
+        <div class="verdicts">
+          ${ev ? `<span style="color:${verdictColor}">You: ${ev.will_work}</span>` : ''}
+          ${cr ? `<span style="color:${aiColor}">AI: ${cr.agrees ? 'agrees' : 'disagrees'}</span>` : ''}
+        </div>
+      </div>
+    `;
+  });
+
+  html += `
+    <div class="done-actions">
+      <button class="btn" onclick="showHistory()">View History</button>
+      <button class="btn btn-primary" onclick="refetch()">Fetch New Batch</button>
+    </div>
+  </div>`;
+
+  el.innerHTML = html;
+  show('done-screen');
+}
+
 // ─── Fetch Startups ─────────────────────────────────────────────────────────
 async function fetchStartups() {
-  hide('empty-state');
+  hide('empty-state'); hide('done-screen');
+  document.getElementById('card-stack').innerHTML = '';
+  hide('progress-bar');
   show('loading-state');
   document.getElementById('loading-msg').textContent = 'Fetching from HN + asking Groq to pick 3...';
+  startLoadingTimer('loading-timer', 15);
 
   try {
     const res = await fetch('/api/fetch', { method: 'POST' });
@@ -417,9 +761,12 @@ async function fetchStartups() {
     startups = data.startups;
     evals = {};
     critiques = {};
+    currentIdx = 0;
+    stopLoadingTimer();
     hide('loading-state');
-    renderStartups();
+    showCardView();
   } catch (e) {
+    stopLoadingTimer();
     hide('loading-state');
     show('empty-state');
     showError(e.message);
@@ -427,67 +774,12 @@ async function fetchStartups() {
 }
 
 function refetch() {
-  document.getElementById('startups-list').innerHTML = '';
-  hide('done-bar');
+  document.getElementById('card-stack').innerHTML = '';
+  hide('done-screen'); hide('progress-bar');
   fetchStartups();
 }
 
-// ─── Render Startups ────────────────────────────────────────────────────────
-function renderStartups() {
-  const container = document.getElementById('startups-list');
-  container.innerHTML = '';
-
-  startups.forEach((s, idx) => {
-    const block = document.createElement('div');
-    block.className = 'startup-block';
-    block.id = `startup-${idx}`;
-
-    let html = `
-      <div class="startup-index">${idx + 1} of ${startups.length}</div>
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-source">${esc(s.source)}</div>
-            <h3 class="card-name">${esc(s.name)}</h3>
-          </div>
-          ${s.url ? `<a href="${esc(s.url)}" target="_blank" class="card-link">↗ source</a>` : ''}
-        </div>
-        <div class="card-summary">${esc(s.summary)}</div>
-        <div class="card-grid">
-          <div>
-            <div class="card-label">Problem</div>
-            <div class="card-value">${esc(s.problem)}</div>
-          </div>
-          <div>
-            <div class="card-label">Business Model</div>
-            <div class="card-value">${esc(s.business_model)}</div>
-          </div>
-          <div class="full">
-            <div class="card-label">Key Bet</div>
-            <div class="card-value">${esc(s.key_bet)}</div>
-          </div>
-        </div>
-      </div>
-      <div class="spacer-2"></div>
-    `;
-
-    if (evals[idx]) {
-      html += renderEvalSummary(idx);
-      html += '<div class="spacer-2"></div>';
-      if (critiques[idx]) {
-        html += renderCritique(critiques[idx]);
-      }
-    } else {
-      html += renderEvalForm(idx);
-    }
-
-    block.innerHTML = html;
-    container.appendChild(block);
-  });
-
-  checkAllDone();
-}
-
+// ─── Eval Form ──────────────────────────────────────────────────────────────
 function renderEvalForm(idx) {
   return `
     <div class="eval-form" id="form-${idx}">
@@ -554,22 +846,21 @@ function setPill(el) {
   const field = el.dataset.field;
   const val = el.dataset.val;
   getForm(idx)[field] = val;
-
-  // Update UI
   el.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
   checkSubmittable(idx);
+  saveDrafts();
 }
 
 function setConf(el) {
   const idx = el.dataset.idx;
   const val = parseInt(el.dataset.val);
   getForm(idx).confidence = val;
-
   el.parentElement.querySelectorAll('.dot').forEach(d => {
     d.classList.toggle('active', parseInt(d.dataset.val) <= val);
   });
   checkSubmittable(idx);
+  saveDrafts();
 }
 
 function checkSubmittable(idx) {
@@ -581,11 +872,11 @@ function checkSubmittable(idx) {
   if (btn) btn.disabled = !ok;
 }
 
-// Listen for textarea changes
 document.addEventListener('input', (e) => {
   if (e.target.tagName === 'TEXTAREA' && e.target.id.startsWith('reasoning-')) {
     const idx = e.target.id.split('-')[1];
     checkSubmittable(idx);
+    saveDrafts();
   }
 });
 
@@ -596,7 +887,12 @@ async function submitEval(idx) {
 
   const btn = document.getElementById(`submit-${idx}`);
   btn.disabled = true;
-  btn.textContent = 'Generating critique...';
+  btn.innerHTML = '<span class="spinner-inline"></span>Generating critique...';
+  const evalStart = Date.now();
+  const evalTimer = setInterval(() => {
+    const elapsed = Math.round((Date.now() - evalStart) / 1000);
+    btn.innerHTML = `<span class="spinner-inline"></span>Generating critique... ${elapsed}s`;
+  }, 1000);
 
   try {
     const res = await fetch('/api/eval', {
@@ -614,10 +910,14 @@ async function submitEval(idx) {
     if (!res.ok) throw new Error('Submit failed');
     const data = await res.json();
 
+    clearInterval(evalTimer);
     evals[idx] = f;
     critiques[idx] = data.critique;
-    renderStartups();
+    delete formState[idx];
+    saveDrafts();
+    showCardView();
   } catch (e) {
+    clearInterval(evalTimer);
     btn.disabled = false;
     btn.textContent = 'Submit & Get Critique';
     showError(e.message);
@@ -627,8 +927,8 @@ async function submitEval(idx) {
 // ─── Render Results ─────────────────────────────────────────────────────────
 function renderEvalSummary(idx) {
   const ev = evals[idx];
-  const verdictColor = ev.will_work === 'yes' ? 'var(--accent)' : ev.will_work === 'no' ? 'var(--red)' : 'var(--yellow)';
-  const buildColor = ev.would_build === 'yes' ? 'var(--accent)' : 'var(--text-dim)';
+  const verdictColor = ev.will_work === 'yes' ? 'var(--green)' : ev.will_work === 'no' ? 'var(--red)' : 'var(--yellow)';
+  const buildColor = ev.would_build === 'yes' ? 'var(--green)' : 'var(--text-dim)';
 
   return `
     <div class="card eval-summary">
@@ -636,12 +936,8 @@ function renderEvalSummary(idx) {
       <div class="meta">
         <span class="verdict" style="color:${verdictColor}">Will work: ${ev.will_work}</span>
         <span class="risk-badge risk-${ev.biggest_risk}">${(ev.biggest_risk||'').replace('_',' ')}</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim)">
-          Confidence: ${ev.confidence}/5
-        </span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:${buildColor}">
-          Would build: ${ev.would_build}
-        </span>
+        <span style="font-size:12px;color:var(--text-dim)">Confidence: ${ev.confidence}/5</span>
+        <span style="font-size:12px;color:${buildColor}">Would build: ${ev.would_build}</span>
       </div>
       <div class="reasoning">${esc(ev.reasoning)}</div>
     </div>
@@ -652,81 +948,172 @@ function renderCritique(c) {
   const agreesClass = c.agrees ? 'agrees' : 'disagrees';
   const agreesText = c.agrees ? 'AGREES' : 'DISAGREES';
   const blindspots = (c.blind_spots || []).map(b =>
-    `<div class="blindspot-item">→ ${esc(b)}</div>`
+    `<div class="blindspot-item">${esc(b)}</div>`
   ).join('');
 
   return `
     <div class="critique">
       <div class="critique-title">AI Critique</div>
-      <div class="critique-verdict ${agreesClass}">${agreesText} — ${esc(c.verdict || '')}</div>
+      <div class="critique-verdict ${agreesClass}">${agreesText} - ${esc(c.verdict || '')}</div>
       <div class="critique-body">${esc(c.main_argument || '')}</div>
       ${blindspots ? `
-        <div style="margin-bottom:16px">
-          <div class="critique-section-title blindspots">Blind Spots in Your Reasoning</div>
+        <div style="margin-bottom:14px">
+          <div class="critique-section-title blindspots">Blind Spots</div>
           ${blindspots}
         </div>
       ` : ''}
       ${c.strongest_point ? `
         <div>
-          <div class="critique-section-title strongest">Strongest Point in Your Eval</div>
-          <div style="font-size:13px;color:var(--text-muted);line-height:1.6">${esc(c.strongest_point)}</div>
+          <div class="critique-section-title strongest">Strongest Point</div>
+          <div style="font-size:14px;color:var(--text-muted);line-height:1.6">${esc(c.strongest_point)}</div>
         </div>
       ` : ''}
     </div>
   `;
 }
 
-function checkAllDone() {
-  const allEvaled = startups.length > 0 && Object.keys(critiques).length === startups.length;
-  if (allEvaled) {
-    const disagreements = Object.values(critiques).filter(c => !c.agrees).length;
-    document.getElementById('done-summary').textContent =
-      `All done for today. ${disagreements} disagreement${disagreements !== 1 ? 's' : ''} with the AI.`;
-    show('done-bar');
-  } else {
-    hide('done-bar');
-  }
-}
-
 // ─── History ────────────────────────────────────────────────────────────────
+const historyFilters = { search: '', risk: null, agrees: null };
+
 async function loadHistory() {
   const container = document.getElementById('history-list');
   container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading history...</p></div>';
+  hide('history-filters');
+  hide('export-btn');
 
   try {
     const res = await fetch('/api/history');
     const data = await res.json();
-    
+
     if (!data.sessions || data.sessions.length === 0) {
       container.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px 0">No past evaluations yet.</p>';
       return;
     }
 
-    container.innerHTML = data.sessions.map(session => `
-      <div style="margin-bottom:32px">
-        <div class="history-date">${session.date}</div>
-        ${session.startups.map(s => {
-          const ev = s.eval;
-          const cr = s.critique;
-          const verdictColor = ev?.will_work === 'yes' ? 'var(--accent)' : ev?.will_work === 'no' ? 'var(--red)' : 'var(--yellow)';
-          return `
-            <div class="history-item">
-              <div class="history-item-header">
-                <span class="history-item-name">${esc(s.name)}</span>
-                <div class="history-item-verdicts">
-                  ${ev ? `<span style="color:${verdictColor}">You: ${ev.will_work}</span>` : ''}
-                  ${cr ? `<span style="color:${cr.agrees ? 'var(--accent)' : 'var(--red)'}">AI: ${cr.agrees ? 'agrees' : 'disagrees'}</span>` : ''}
-                </div>
-              </div>
-              ${ev ? `<p style="font-size:13px;color:var(--text-muted);line-height:1.5">${esc(ev.reasoning)}</p>` : ''}
-            </div>
-          `;
-        }).join('')}
-      </div>
-    `).join('');
+    historyData = data.sessions;
+    show('history-filters');
+    show('export-btn');
+    clearHistoryFilters();
   } catch (e) {
     container.innerHTML = `<p style="color:var(--red)">Failed to load history: ${esc(e.message)}</p>`;
   }
+}
+
+function renderFilteredHistory(sessions) {
+  const container = document.getElementById('history-list');
+  if (!sessions.length) {
+    container.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px 0">No matches.</p>';
+    return;
+  }
+  container.innerHTML = sessions.map(session => `
+    <div style="margin-bottom:32px">
+      <div class="history-date">${session.date}</div>
+      ${session.startups.map(s => {
+        const ev = s.eval;
+        const cr = s.critique;
+        const verdictColor = ev?.will_work === 'yes' ? 'var(--green)' : ev?.will_work === 'no' ? 'var(--red)' : 'var(--yellow)';
+        return `
+          <div class="history-item">
+            <div class="history-item-header">
+              <span class="history-item-name">${esc(s.name)}</span>
+              <div class="history-item-verdicts">
+                ${ev ? `<span style="color:${verdictColor}">You: ${ev.will_work}</span>` : ''}
+                ${cr ? `<span style="color:${cr.agrees ? 'var(--green)' : 'var(--red)'}">AI: ${cr.agrees ? 'agrees' : 'disagrees'}</span>` : ''}
+              </div>
+            </div>
+            ${ev ? `<p style="font-size:13px;color:var(--text-muted);line-height:1.5">${esc(ev.reasoning)}</p>` : ''}
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `).join('');
+}
+
+function toggleFilter(el) {
+  const filterType = el.dataset.filter;
+  const val = el.dataset.val;
+  const wasActive = el.classList.contains('active');
+  document.querySelectorAll(`.filter-pill[data-filter="${filterType}"]`).forEach(p => p.classList.remove('active'));
+  if (wasActive) {
+    historyFilters[filterType] = null;
+  } else {
+    el.classList.add('active');
+    historyFilters[filterType] = val;
+  }
+  applyHistoryFilters();
+}
+
+function clearHistoryFilters() {
+  historyFilters.search = '';
+  historyFilters.risk = null;
+  historyFilters.agrees = null;
+  const searchInput = document.getElementById('history-search');
+  if (searchInput) searchInput.value = '';
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  applyHistoryFilters();
+}
+
+function applyHistoryFilters() {
+  const search = (document.getElementById('history-search')?.value || '').toLowerCase().trim();
+  historyFilters.search = search;
+
+  const filtered = historyData.map(session => {
+    const matchingStartups = session.startups.filter(s => {
+      if (search && !s.name.toLowerCase().includes(search)) return false;
+      if (historyFilters.risk && s.eval?.biggest_risk !== historyFilters.risk) return false;
+      if (historyFilters.agrees !== null) {
+        if (!s.critique) return false;
+        const aiAgreed = s.critique.agrees ? 'yes' : 'no';
+        if (aiAgreed !== historyFilters.agrees) return false;
+      }
+      return true;
+    });
+    if (!matchingStartups.length) return null;
+    return { date: session.date, startups: matchingStartups };
+  }).filter(Boolean);
+
+  renderFilteredHistory(filtered);
+}
+
+// ─── CSV Export ─────────────────────────────────────────────────────────────
+function csvEscape(str) {
+  if (!str) return '""';
+  str = String(str);
+  if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+    return '"' + str.replace(/"/g, '""') + '"';
+  }
+  return str;
+}
+
+function exportCSV() {
+  if (!historyData.length) return;
+  const headers = ['date','startup_name','will_work','reasoning','biggest_risk','confidence','would_build','ai_agrees','ai_verdict'];
+  const rows = [headers.join(',')];
+  historyData.forEach(session => {
+    session.startups.forEach(s => {
+      const ev = s.eval;
+      const cr = s.critique;
+      if (!ev) return;
+      rows.push([
+        session.date,
+        csvEscape(s.name),
+        ev.will_work,
+        csvEscape(ev.reasoning),
+        ev.biggest_risk,
+        ev.confidence,
+        ev.would_build,
+        cr ? (cr.agrees ? 'yes' : 'no') : '',
+        cr ? csvEscape(cr.verdict) : ''
+      ].join(','));
+    });
+  });
+  const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `startup-evals-${todayStr}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 // ─── Escape HTML ────────────────────────────────────────────────────────────
