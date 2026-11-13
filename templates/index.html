@@ -36,7 +36,6 @@
 
   .container { max-width: 600px; margin: 0 auto; padding: 20px 24px; }
 
-  /* Header */
   .header {
     display: flex; justify-content: space-between; align-items: center;
     padding-bottom: 16px; margin-bottom: 24px;
@@ -50,7 +49,6 @@
   }
   .header-actions { display: flex; gap: 8px; }
 
-  /* Buttons */
   .btn {
     padding: 8px 16px; background: transparent;
     border: 1px solid var(--border); border-radius: 6px;
@@ -69,7 +67,6 @@
   }
   .btn-big { padding: 14px 40px; font-size: 15px; }
 
-  /* Progress bar */
   .progress-bar {
     display: flex; justify-content: center; align-items: center;
     gap: 12px; margin-bottom: 24px;
@@ -96,12 +93,10 @@
   }
   .progress-line.done { background: var(--green); }
 
-  /* Empty state */
   .empty { text-align: center; padding: 80px 0; }
   .empty .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
   .empty p { color: var(--text-muted); font-size: 15px; margin-bottom: 32px; }
 
-  /* Loading */
   .loading { text-align: center; padding: 80px 0; }
   .spinner {
     width: 24px; height: 24px;
@@ -115,7 +110,6 @@
   .loading p { color: var(--text-muted); font-size: 14px; }
   .loading-timer { color: var(--text-dim); font-size: 12px; margin-top: 8px; }
 
-  /* Error */
   .error {
     padding: 16px; background: rgba(220,53,69,0.06);
     border: 1px solid rgba(220,53,69,0.2); border-radius: 8px;
@@ -127,7 +121,6 @@
     cursor: pointer; font-size: 16px;
   }
 
-  /* Card */
   .card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 12px; padding: 24px; margin-bottom: 4px;
@@ -167,7 +160,6 @@
   }
   .card-value { font-size: 14px; color: var(--text); line-height: 1.5; }
 
-  /* Eval form */
   .eval-form {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 12px; padding: 24px;
@@ -205,7 +197,6 @@
   }
   textarea:focus { border-color: var(--accent); }
 
-  /* Confidence dots */
   .confidence-dots { display: flex; gap: 8px; }
   .dot {
     width: 32px; height: 32px; border-radius: 50%;
@@ -218,7 +209,6 @@
     background: var(--accent); border-color: var(--accent); color: #fff;
   }
 
-  /* Eval summary */
   .eval-summary .meta {
     display: flex; gap: 14px; align-items: center;
     margin-bottom: 12px; flex-wrap: wrap;
@@ -228,7 +218,6 @@
     font-size: 14px; color: var(--text-muted); line-height: 1.6;
   }
 
-  /* Risk badge */
   .risk-badge {
     display: inline-block; padding: 3px 10px; border-radius: 4px;
     font-size: 11px; font-weight: 600;
@@ -240,7 +229,6 @@
   .risk-competition { color: var(--red); border: 1px solid var(--red); }
   .risk-regulation { color: var(--purple); border: 1px solid var(--purple); }
 
-  /* Critique */
   .critique {
     background: var(--surface); border: 1px solid rgba(255,102,0,0.2);
     border-radius: 12px; padding: 24px;
@@ -274,14 +262,12 @@
   }
   .blindspot-item:last-child { border-bottom: none; }
 
-  /* Nav row */
   .nav-row {
     display: flex; justify-content: space-between; align-items: center;
     margin-top: 20px; padding-top: 16px;
   }
   .nav-row .btn { min-width: 100px; text-align: center; }
 
-  /* Done screen */
   .done-screen {
     text-align: center; padding: 40px 0;
     animation: fadeIn 0.3s ease;
@@ -308,7 +294,6 @@
     display: flex; gap: 12px; justify-content: center; margin-top: 28px;
   }
 
-  /* Animations */
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
@@ -319,7 +304,6 @@
   }
   .card-animate { animation: fadeIn 0.25s ease; }
 
-  /* Inline spinner */
   .spinner-inline {
     width: 14px; height: 14px;
     border: 2px solid rgba(255,255,255,0.3);
@@ -331,7 +315,6 @@
     margin-right: 8px;
   }
 
-  /* History */
   .history-date {
     font-size: 13px; color: var(--accent);
     letter-spacing: 0.5px; margin-bottom: 10px; font-weight: 700;
@@ -349,7 +332,6 @@
   .history-item-verdicts { display: flex; gap: 8px; align-items: center; }
   .history-item-verdicts span { font-size: 11px; font-weight: 600; }
 
-  /* Filters */
   .filter-bar {
     margin-bottom: 20px; display: flex;
     flex-direction: column; gap: 12px;
@@ -389,6 +371,21 @@
     .done-summary-card { flex-direction: column; gap: 8px; }
     .done-summary-card .verdicts { justify-content: flex-start; }
   }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .btn-small { font-size: 11px; padding: 5px 12px; }
+  .btn-full-width { width: 100%; padding: 14px 0; }
+  .spacer { height: 4px; }
+  .clickable { cursor: pointer; }
+  .text-green { color: var(--green); }
+  .text-red { color: var(--red); }
+  .text-yellow { color: var(--yellow); }
+  .text-dim { color: var(--text-dim); }
+  .small-note { font-size: 12px; }
+  .critique-section { margin-bottom: 14px; }
+  .strongest-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+  .empty-message { color: var(--text-muted); text-align: center; padding: 40px 0; }
+  .history-session { margin-bottom: 32px; }
+  .history-reasoning { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -428,7 +425,7 @@
   </div>
 
   <div id="history-view" style="display:none">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+    <div class="top-bar">
       <button class="btn" onclick="showMain()">&#8592; Back</button>
       <button class="btn" id="export-btn" onclick="exportCSV()" style="display:none">Export CSV</button>
     </div>
@@ -448,7 +445,7 @@
         <button class="filter-pill" data-filter="agrees" data-val="no" onclick="toggleFilter(this)">disagrees</button>
       </div>
       <div class="filter-row">
-        <button class="btn" onclick="clearHistoryFilters()" style="font-size:11px;padding:5px 12px">Clear filters</button>
+        <button class="btn btn-small" onclick="clearHistoryFilters()">Clear filters</button>
       </div>
     </div>
     <div id="history-list"></div>
@@ -456,136 +453,229 @@
 </div>
 
 <script>
-// ─── State ──────────────────────────────────────────────────────────────────
 let startups = [];
-let evals = {};
+let evaluations = {};
 let critiques = {};
-let currentIdx = 0;
+let currentIndex = 0;
 let historyData = [];
-const todayStr = new Date().toISOString().slice(0, 10);
-const BATCH_KEY = `startup-eval-draft-${todayStr}`;
+const todayText = new Date().toISOString().slice(0, 10);
+const draftKeyPrefix = 'startup-eval-draft-';
+const draftStorageKey = draftKeyPrefix + todayText;
+const formState = {};
+const historyFilters = { search: '', risk: null, agrees: null };
+const scrollToTopSmoothly = { top: 0, behavior: 'smooth' };
 
-// ─── Draft Autosave ────────────────────────────────────────────────────────
-function saveDrafts() {
-  const toSave = {};
-  for (const idx in formState) {
-    const sid = startups[idx]?.id;
-    if (sid && !evals[idx]) toSave[sid] = formState[idx];
-  }
-  localStorage.setItem(BATCH_KEY, JSON.stringify(toSave));
+function getElement(id) {
+  return document.getElementById(id);
 }
 
-function loadDrafts() {
+function show(id) {
+  getElement(id).style.display = '';
+}
+
+function hide(id) {
+  getElement(id).style.display = 'none';
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  const helper = document.createElement('div');
+  helper.textContent = text;
+  return helper.innerHTML;
+}
+
+function plural(count) {
+  if (count === 1) return '';
+  return 's';
+}
+
+function formatRisk(risk) {
+  return (risk || '').replace('_', ' ');
+}
+
+function getVerdictColorClass(willWork) {
+  if (willWork === 'yes') return 'text-green';
+  if (willWork === 'no') return 'text-red';
+  return 'text-yellow';
+}
+
+function getAiColorClass(agrees) {
+  if (agrees) return 'text-green';
+  return 'text-red';
+}
+
+function getAiVerdictWord(agrees) {
+  if (agrees) return 'agrees';
+  return 'disagrees';
+}
+
+function renderVerdictBadges(evaluation, critique) {
+  let html = '';
+  if (evaluation) {
+    html += `<span class="${getVerdictColorClass(evaluation.willWork)}">You: ${evaluation.willWork}</span>`;
+  }
+  if (critique) {
+    html += `<span class="${getAiColorClass(critique.agrees)}">AI: ${getAiVerdictWord(critique.agrees)}</span>`;
+  }
+  return html;
+}
+
+function saveDrafts() {
+  const drafts = {};
+  for (const index in formState) {
+    const startupId = startups[index]?.id;
+    if (startupId && !evaluations[index]) {
+      drafts[startupId] = formState[index];
+    }
+  }
+  localStorage.setItem(draftStorageKey, JSON.stringify(drafts));
+}
+
+function removeOldDrafts() {
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key && key.startsWith('startup-eval-draft-') && key !== BATCH_KEY) {
+    if (key && key.startsWith(draftKeyPrefix) && key !== draftStorageKey) {
       localStorage.removeItem(key);
     }
   }
+}
+
+function loadDrafts() {
+  removeOldDrafts();
   try {
-    const raw = localStorage.getItem(BATCH_KEY);
-    if (!raw) return;
-    const saved = JSON.parse(raw);
-    startups.forEach((s, idx) => {
-      if (saved[s.id] && !evals[idx]) {
-        formState[idx] = saved[s.id];
+    const savedText = localStorage.getItem(draftStorageKey);
+    if (!savedText) return;
+
+    const drafts = JSON.parse(savedText);
+    startups.forEach((startup, index) => {
+      if (drafts[startup.id] && !evaluations[index]) {
+        formState[index] = drafts[startup.id];
       }
     });
-  } catch (e) { /* ignore */ }
+  } catch (error) {
+  }
+}
+
+function selectPillButton(pill) {
+  pill.parentElement.querySelectorAll('.pill').forEach(otherPill => otherPill.classList.remove('active'));
+  pill.classList.add('active');
+}
+
+function highlightConfidenceDots(dots, confidence) {
+  dots.forEach(dot => dot.classList.toggle('active', parseInt(dot.dataset.val) <= confidence));
 }
 
 function restoreDrafts() {
-  const idx = currentIdx;
-  if (evals[idx] || !formState[idx]) return;
-  const f = formState[idx];
+  const index = currentIndex;
+  if (evaluations[index] || !formState[index]) return;
+
+  const form = formState[index];
+
   ['willWork', 'biggestRisk', 'wouldBuild'].forEach(field => {
-    if (f[field]) {
-      const pill = document.querySelector(`.pill[data-idx="${idx}"][data-field="${field}"][data-val="${f[field]}"]`);
-      if (pill) { pill.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active')); pill.classList.add('active'); }
-    }
+    if (!form[field]) return;
+    const pill = document.querySelector(`.pill[data-idx="${index}"][data-field="${field}"][data-val="${form[field]}"]`);
+    if (pill) selectPillButton(pill);
   });
-  if (f.confidence > 0) {
-    const dots = document.querySelectorAll(`#conf-${idx} .dot`);
-    dots.forEach(d => d.classList.toggle('active', parseInt(d.dataset.val) <= f.confidence));
+
+  if (form.confidence > 0) {
+    highlightConfidenceDots(document.querySelectorAll(`#conf-${index} .dot`), form.confidence);
   }
-  if (f.reasoning) {
-    const ta = document.getElementById(`reasoning-${idx}`);
-    if (ta) ta.value = f.reasoning;
+
+  if (form.reasoning) {
+    const reasoningBox = getElement(`reasoning-${index}`);
+    if (reasoningBox) reasoningBox.value = form.reasoning;
   }
-  checkSubmittable(idx);
+
+  checkSubmittable(index);
 }
 
-// ─── Loading Timer ─────────────────────────────────────────────────────────
-let loadingInterval = null;
-function startLoadingTimer(elementId, estimateSec) {
-  const el = document.getElementById(elementId);
-  if (!el) return;
-  const start = Date.now();
-  el.textContent = `~${estimateSec}s estimated`;
-  loadingInterval = setInterval(() => {
-    const elapsed = Math.round((Date.now() - start) / 1000);
-    el.textContent = `${elapsed}s elapsed`;
+let loadingTimer = null;
+
+function startLoadingTimer(elementId, estimatedSeconds) {
+  const timerElement = getElement(elementId);
+  if (!timerElement) return;
+
+  const startTime = Date.now();
+  timerElement.textContent = `~${estimatedSeconds}s estimated`;
+
+  loadingTimer = setInterval(() => {
+    const secondsPassed = Math.round((Date.now() - startTime) / 1000);
+    timerElement.textContent = `${secondsPassed}s elapsed`;
   }, 1000);
 }
+
 function stopLoadingTimer() {
-  if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; }
-  const el = document.getElementById('loading-timer');
-  if (el) el.textContent = '';
+  if (loadingTimer) {
+    clearInterval(loadingTimer);
+    loadingTimer = null;
+  }
+  const timerElement = getElement('loading-timer');
+  if (timerElement) timerElement.textContent = '';
 }
 
-// ─── Init ───────────────────────────────────────────────────────────────────
-document.getElementById('today-date').textContent =
+getElement('today-date').textContent =
   new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
-(async () => {
+async function loadTodaysStartups() {
   try {
-    const res = await fetch('/api/today');
-    const data = await res.json();
-    if (data.startups.length > 0) {
-      startups = data.startups;
-      data.startups.forEach((s, i) => {
-        if (s.eval) evals[i] = s.eval;
-        if (s.critique) critiques[i] = s.critique;
-      });
-      loadDrafts();
-      // Start at first unevaluated, or 0
-      currentIdx = startups.findIndex((_, i) => !critiques[i]);
-      if (currentIdx === -1) currentIdx = 0;
-      showCardView();
-    } else {
+    const response = await fetch('/api/today');
+    const data = await response.json();
+
+    if (data.startups.length === 0) {
       show('empty-state');
+      return;
     }
-  } catch (e) {
+
+    startups = data.startups;
+    startups.forEach((startup, index) => {
+      if (startup.eval) evaluations[index] = startup.eval;
+      if (startup.critique) critiques[index] = startup.critique;
+    });
+    loadDrafts();
+
+    currentIndex = startups.findIndex((startup, index) => !critiques[index]);
+    if (currentIndex === -1) currentIndex = 0;
+
+    showCardView();
+  } catch (error) {
     show('empty-state');
   }
-})();
+}
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
-function show(id) { document.getElementById(id).style.display = ''; }
-function hide(id) { document.getElementById(id).style.display = 'none'; }
-function showError(msg) {
-  document.getElementById('error-msg').textContent = msg;
+loadTodaysStartups();
+
+function showError(message) {
+  getElement('error-msg').textContent = message;
   show('error-bar');
 }
-function hideError() { hide('error-bar'); }
+
+function hideError() {
+  hide('error-bar');
+}
 
 function showMain() {
-  show('main-view'); hide('history-view');
+  show('main-view');
+  hide('history-view');
 }
+
 function showHistory() {
-  hide('main-view'); show('history-view');
+  hide('main-view');
+  show('history-view');
   loadHistory();
 }
 
-// ─── Card View ──────────────────────────────────────────────────────────────
+function allStartupsCritiqued() {
+  return Object.keys(critiques).length === startups.length;
+}
+
 function showCardView() {
-  const allDone = startups.length > 0 && Object.keys(critiques).length === startups.length;
-  if (allDone) {
+  if (startups.length > 0 && allStartupsCritiqued()) {
     hide('progress-bar');
-    document.getElementById('card-stack').innerHTML = '';
+    getElement('card-stack').innerHTML = '';
     renderDoneScreen();
     return;
   }
+
   show('progress-bar');
   hide('done-screen');
   renderProgress();
@@ -593,142 +683,147 @@ function showCardView() {
 }
 
 function renderProgress() {
-  const bar = document.getElementById('progress-bar');
   let html = '';
-  startups.forEach((s, i) => {
-    const isDone = !!critiques[i];
-    const isActive = i === currentIdx;
-    let cls = 'progress-dot';
-    if (isDone) cls += ' done';
-    else if (isActive) cls += ' active';
-    html += `<div class="${cls}" onclick="goTo(${i})">${isDone ? '&#10003;' : (i + 1)}</div>`;
-    if (i < startups.length - 1) {
-      html += `<div class="progress-line${isDone && critiques[i+1] ? ' done' : (isDone ? ' done' : '')}"></div>`;
+
+  startups.forEach((startup, index) => {
+    const isDone = Boolean(critiques[index]);
+    const isActive = index === currentIndex;
+
+    let dotClass = 'progress-dot';
+    let dotLabel = index + 1;
+    if (isDone) {
+      dotClass += ' done';
+      dotLabel = '&#10003;';
+    } else if (isActive) {
+      dotClass += ' active';
+    }
+
+    html += `<div class="${dotClass}" onclick="goTo(${index})">${dotLabel}</div>`;
+
+    const isLastStartup = index === startups.length - 1;
+    if (!isLastStartup) {
+      const lineClass = isDone ? 'progress-line done' : 'progress-line';
+      html += `<div class="${lineClass}"></div>`;
     }
   });
-  bar.innerHTML = html;
+
+  getElement('progress-bar').innerHTML = html;
 }
 
-function renderCurrentCard() {
-  const container = document.getElementById('card-stack');
-  const idx = currentIdx;
-  const s = startups[idx];
+function renderStartupCard(startup) {
+  let sourceLink = '';
+  if (startup.url) {
+    sourceLink = `<a href="${escapeHtml(startup.url)}" target="_blank" class="card-link">&#8599; source</a>`;
+  }
 
-  let html = `<div class="card-animate">`;
-
-  html += `
+  return `
     <div class="card">
       <div class="card-header">
         <div>
-          <div class="card-source">${esc(s.source)}</div>
-          <h3 class="card-name">${esc(s.name)}</h3>
+          <div class="card-source">${escapeHtml(startup.source)}</div>
+          <h3 class="card-name">${escapeHtml(startup.name)}</h3>
         </div>
-        ${s.url ? `<a href="${esc(s.url)}" target="_blank" class="card-link">&#8599; source</a>` : ''}
+        ${sourceLink}
       </div>
-      <div class="card-summary">${esc(s.summary)}</div>
+      <div class="card-summary">${escapeHtml(startup.summary)}</div>
       <div class="card-grid">
         <div>
           <div class="card-label">Problem</div>
-          <div class="card-value">${esc(s.problem)}</div>
+          <div class="card-value">${escapeHtml(startup.problem)}</div>
         </div>
         <div>
           <div class="card-label">Business Model</div>
-          <div class="card-value">${esc(s.businessModel)}</div>
+          <div class="card-value">${escapeHtml(startup.businessModel)}</div>
         </div>
         <div class="full">
           <div class="card-label">Key Bet</div>
-          <div class="card-value">${esc(s.keyBet)}</div>
+          <div class="card-value">${escapeHtml(startup.keyBet)}</div>
         </div>
       </div>
     </div>
-    <div style="height:4px"></div>
+    <div class="spacer"></div>
   `;
+}
 
-  if (evals[idx]) {
-    html += renderEvalSummary(idx);
-    if (critiques[idx]) {
-      html += '<div style="height:4px"></div>';
-      html += renderCritique(critiques[idx]);
+function renderNavigation(index) {
+  const emptySlot = '<div></div>';
+
+  let backButton = emptySlot;
+  if (index > 0) {
+    backButton = '<button class="btn" onclick="goPrev()">&#8592; Previous</button>';
+  }
+
+  let forwardButton = emptySlot;
+  const isAnswered = critiques[index] || evaluations[index];
+  const isLastStartup = index === startups.length - 1;
+
+  if (isAnswered && !isLastStartup) {
+    forwardButton = '<button class="btn btn-primary" onclick="goNext()">Next &#8594;</button>';
+  } else if (isAnswered && allStartupsCritiqued()) {
+    forwardButton = '<button class="btn btn-primary" onclick="showCardView()">See Results</button>';
+  }
+
+  return `<div class="nav-row">${backButton}${forwardButton}</div>`;
+}
+
+function renderCurrentCard() {
+  const index = currentIndex;
+  let html = '<div class="card-animate">';
+
+  html += renderStartupCard(startups[index]);
+
+  if (evaluations[index]) {
+    html += renderEvalSummary(index);
+    if (critiques[index]) {
+      html += '<div class="spacer"></div>';
+      html += renderCritique(critiques[index]);
     }
   } else {
-    html += renderEvalForm(idx);
+    html += renderEvalForm(index);
   }
 
-  // Navigation
-  html += `<div class="nav-row">`;
-  if (idx > 0) {
-    html += `<button class="btn" onclick="goPrev()">&#8592; Previous</button>`;
-  } else {
-    html += `<div></div>`;
-  }
-  if (critiques[idx] || evals[idx]) {
-    if (idx < startups.length - 1) {
-      html += `<button class="btn btn-primary" onclick="goNext()">Next &#8594;</button>`;
-    } else {
-      const allDone = Object.keys(critiques).length === startups.length;
-      if (allDone) {
-        html += `<button class="btn btn-primary" onclick="showCardView()">See Results</button>`;
-      } else {
-        html += `<div></div>`;
-      }
-    }
-  } else {
-    html += `<div></div>`;
-  }
-  html += `</div>`;
+  html += renderNavigation(index);
+  html += '</div>';
 
-  html += `</div>`;
-  container.innerHTML = html;
+  getElement('card-stack').innerHTML = html;
   restoreDrafts();
 }
 
-function goNext() {
-  if (currentIdx < startups.length - 1) {
-    currentIdx++;
+function goTo(index) {
+  if (index >= 0 && index < startups.length) {
+    currentIndex = index;
     showCardView();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(scrollToTopSmoothly);
   }
+}
+
+function goNext() {
+  goTo(currentIndex + 1);
 }
 
 function goPrev() {
-  if (currentIdx > 0) {
-    currentIdx--;
-    showCardView();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  goTo(currentIndex - 1);
 }
 
-function goTo(idx) {
-  if (idx >= 0 && idx < startups.length) {
-    currentIdx = idx;
-    showCardView();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-}
-
-// ─── Done Screen ────────────────────────────────────────────────────────────
 function renderDoneScreen() {
-  const el = document.getElementById('done-screen');
-  const agreements = Object.values(critiques).filter(c => c.agrees).length;
+  let agreements = 0;
+  for (const critique of Object.values(critiques)) {
+    if (critique.agrees) agreements++;
+  }
   const disagreements = startups.length - agreements;
 
   let html = `
     <div class="done-screen">
       <h2>All done for today</h2>
-      <p class="subtitle">${agreements} agreement${agreements !== 1 ? 's' : ''}, ${disagreements} disagreement${disagreements !== 1 ? 's' : ''} with the AI</p>
+      <p class="subtitle">${agreements} agreement${plural(agreements)}, ${disagreements} disagreement${plural(disagreements)} with the AI</p>
   `;
 
-  startups.forEach((s, i) => {
-    const ev = evals[i];
-    const cr = critiques[i];
-    const verdictColor = ev?.willWork === 'yes' ? 'var(--green)' : ev?.willWork === 'no' ? 'var(--red)' : 'var(--yellow)';
-    const aiColor = cr?.agrees ? 'var(--green)' : 'var(--red)';
+  startups.forEach((startup, index) => {
     html += `
-      <div class="done-summary-card" style="cursor:pointer" onclick="goTo(${i})">
-        <span class="name">${esc(s.name)}</span>
+      <div class="done-summary-card clickable" onclick="goTo(${index})">
+        <span class="name">${escapeHtml(startup.name)}</span>
         <div class="verdicts">
-          ${ev ? `<span style="color:${verdictColor}">You: ${ev.willWork}</span>` : ''}
-          ${cr ? `<span style="color:${aiColor}">AI: ${cr.agrees ? 'agrees' : 'disagrees'}</span>` : ''}
+          ${renderVerdictBadges(evaluations[index], critiques[index])}
         </div>
       </div>
     `;
@@ -741,252 +836,251 @@ function renderDoneScreen() {
     </div>
   </div>`;
 
-  el.innerHTML = html;
+  getElement('done-screen').innerHTML = html;
   show('done-screen');
 }
 
-// ─── Fetch Startups ─────────────────────────────────────────────────────────
 async function fetchStartups() {
-  hide('empty-state'); hide('done-screen');
-  document.getElementById('card-stack').innerHTML = '';
+  hide('empty-state');
+  hide('done-screen');
+  getElement('card-stack').innerHTML = '';
   hide('progress-bar');
   show('loading-state');
-  document.getElementById('loading-msg').textContent = 'Fetching from HN + asking Groq to pick 3...';
+  getElement('loading-msg').textContent = 'Fetching from HN + asking Groq to pick 3...';
   startLoadingTimer('loading-timer', 15);
 
   try {
-    const res = await fetch('/api/fetch', { method: 'POST' });
-    if (!res.ok) throw new Error('Fetch failed: ' + res.status);
-    const data = await res.json();
+    const response = await fetch('/api/fetch', { method: 'POST' });
+    if (!response.ok) throw new Error('Fetch failed: ' + response.status);
+    const data = await response.json();
+
     startups = data.startups;
-    evals = {};
+    evaluations = {};
     critiques = {};
-    currentIdx = 0;
+    currentIndex = 0;
+
     stopLoadingTimer();
     hide('loading-state');
     showCardView();
-  } catch (e) {
+  } catch (error) {
     stopLoadingTimer();
     hide('loading-state');
     show('empty-state');
-    showError(e.message);
+    showError(error.message);
   }
 }
 
 function refetch() {
-  document.getElementById('card-stack').innerHTML = '';
-  hide('done-screen'); hide('progress-bar');
+  getElement('card-stack').innerHTML = '';
+  hide('done-screen');
+  hide('progress-bar');
   fetchStartups();
 }
 
-// ─── Eval Form ──────────────────────────────────────────────────────────────
-function renderEvalForm(idx) {
+function renderPills(index, field, options) {
+  return options.map(option =>
+    `<button class="pill" data-field="${field}" data-idx="${index}" data-val="${option}" onclick="setPill(this)">${formatRisk(option)}</button>`
+  ).join('');
+}
+
+function renderEvalForm(index) {
+  const confidenceDots = [1, 2, 3, 4, 5].map(number =>
+    `<div class="dot" data-idx="${index}" data-val="${number}" onclick="setConfidence(this)">${number}</div>`
+  ).join('');
+
   return `
-    <div class="eval-form" id="form-${idx}">
+    <div class="eval-form" id="form-${index}">
       <div class="eval-title">Your Evaluation</div>
 
       <div class="field">
         <div class="field-label">Will it work?</div>
-        <div class="pills">
-          ${['yes','no','maybe'].map(v =>
-            `<button class="pill" data-field="willWork" data-idx="${idx}" data-val="${v}" onclick="setPill(this)">${v}</button>`
-          ).join('')}
-        </div>
+        <div class="pills">${renderPills(index, 'willWork', ['yes', 'no', 'maybe'])}</div>
       </div>
 
       <div class="field">
         <div class="field-label">Why / why not?</div>
-        <textarea id="reasoning-${idx}" rows="4" placeholder="Your reasoning..."></textarea>
+        <textarea id="reasoning-${index}" rows="4" placeholder="Your reasoning..."></textarea>
       </div>
 
       <div class="field">
         <div class="field-label">Biggest risk?</div>
-        <div class="pills">
-          ${['market_size','execution','timing','competition','regulation'].map(v =>
-            `<button class="pill" data-field="biggestRisk" data-idx="${idx}" data-val="${v}" onclick="setPill(this)">${v.replace('_',' ')}</button>`
-          ).join('')}
-        </div>
+        <div class="pills">${renderPills(index, 'biggestRisk', ['market_size', 'execution', 'timing', 'competition', 'regulation'])}</div>
       </div>
 
       <div class="field">
         <div class="field-label">Confidence</div>
-        <div class="confidence-dots" id="conf-${idx}">
-          ${[1,2,3,4,5].map(n =>
-            `<div class="dot" data-idx="${idx}" data-val="${n}" onclick="setConf(this)">${n}</div>`
-          ).join('')}
-        </div>
+        <div class="confidence-dots" id="conf-${index}">${confidenceDots}</div>
       </div>
 
       <div class="field">
         <div class="field-label">Would you build it?</div>
-        <div class="pills">
-          ${['yes','no'].map(v =>
-            `<button class="pill" data-field="wouldBuild" data-idx="${idx}" data-val="${v}" onclick="setPill(this)">${v}</button>`
-          ).join('')}
-        </div>
+        <div class="pills">${renderPills(index, 'wouldBuild', ['yes', 'no'])}</div>
       </div>
 
-      <button class="btn btn-primary" style="width:100%;padding:14px 0" id="submit-${idx}" onclick="submitEval(${idx})" disabled>
+      <button class="btn btn-primary btn-full-width" id="submit-${index}" onclick="submitEval(${index})" disabled>
         Submit & Get Critique
       </button>
     </div>
   `;
 }
 
-// ─── Form State ─────────────────────────────────────────────────────────────
-const formState = {};
-
-function getForm(idx) {
-  if (!formState[idx]) formState[idx] = { willWork:'', reasoning:'', biggestRisk:'', confidence:0, wouldBuild:'' };
-  return formState[idx];
+function getForm(index) {
+  if (!formState[index]) {
+    formState[index] = { willWork: '', reasoning: '', biggestRisk: '', confidence: 0, wouldBuild: '' };
+  }
+  return formState[index];
 }
 
-function setPill(el) {
-  const idx = el.dataset.idx;
-  const field = el.dataset.field;
-  const val = el.dataset.val;
-  getForm(idx)[field] = val;
-  el.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  checkSubmittable(idx);
+function setPill(pill) {
+  const index = pill.dataset.idx;
+  getForm(index)[pill.dataset.field] = pill.dataset.val;
+  selectPillButton(pill);
+  checkSubmittable(index);
   saveDrafts();
 }
 
-function setConf(el) {
-  const idx = el.dataset.idx;
-  const val = parseInt(el.dataset.val);
-  getForm(idx).confidence = val;
-  el.parentElement.querySelectorAll('.dot').forEach(d => {
-    d.classList.toggle('active', parseInt(d.dataset.val) <= val);
-  });
-  checkSubmittable(idx);
+function setConfidence(dot) {
+  const index = dot.dataset.idx;
+  const confidence = parseInt(dot.dataset.val);
+  getForm(index).confidence = confidence;
+  highlightConfidenceDots(dot.parentElement.querySelectorAll('.dot'), confidence);
+  checkSubmittable(index);
   saveDrafts();
 }
 
-function checkSubmittable(idx) {
-  const f = getForm(idx);
-  const reasoning = document.getElementById(`reasoning-${idx}`)?.value?.trim() || '';
-  f.reasoning = reasoning;
-  const ok = f.willWork && reasoning && f.biggestRisk && f.confidence > 0 && f.wouldBuild;
-  const btn = document.getElementById(`submit-${idx}`);
-  if (btn) btn.disabled = !ok;
+function checkSubmittable(index) {
+  const form = getForm(index);
+  const reasoning = getElement(`reasoning-${index}`)?.value?.trim() || '';
+  form.reasoning = reasoning;
+
+  const isComplete = form.willWork && reasoning && form.biggestRisk && form.confidence > 0 && form.wouldBuild;
+
+  const submitButton = getElement(`submit-${index}`);
+  if (submitButton) submitButton.disabled = !isComplete;
 }
 
-document.addEventListener('input', (e) => {
-  if (e.target.tagName === 'TEXTAREA' && e.target.id.startsWith('reasoning-')) {
-    const idx = e.target.id.split('-')[1];
-    checkSubmittable(idx);
+document.addEventListener('input', (event) => {
+  const target = event.target;
+  if (target.tagName === 'TEXTAREA' && target.id.startsWith('reasoning-')) {
+    const index = target.id.split('-')[1];
+    checkSubmittable(index);
     saveDrafts();
   }
 });
 
-// ─── Submit Eval ────────────────────────────────────────────────────────────
-async function submitEval(idx) {
-  const f = getForm(idx);
-  f.reasoning = document.getElementById(`reasoning-${idx}`).value.trim();
+async function submitEval(index) {
+  const form = getForm(index);
+  form.reasoning = getElement(`reasoning-${index}`).value.trim();
 
-  const btn = document.getElementById(`submit-${idx}`);
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner-inline"></span>Generating critique...';
-  const evalStart = Date.now();
-  const evalTimer = setInterval(() => {
-    const elapsed = Math.round((Date.now() - evalStart) / 1000);
-    btn.innerHTML = `<span class="spinner-inline"></span>Generating critique... ${elapsed}s`;
+  const submitButton = getElement(`submit-${index}`);
+  submitButton.disabled = true;
+  submitButton.innerHTML = '<span class="spinner-inline"></span>Generating critique...';
+
+  const startTime = Date.now();
+  const buttonTimer = setInterval(() => {
+    const secondsPassed = Math.round((Date.now() - startTime) / 1000);
+    submitButton.innerHTML = `<span class="spinner-inline"></span>Generating critique... ${secondsPassed}s`;
   }, 1000);
 
   try {
-    const res = await fetch('/api/eval', {
+    const response = await fetch('/api/eval', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        startupId: startups[idx].id,
-        willWork: f.willWork,
-        reasoning: f.reasoning,
-        biggestRisk: f.biggestRisk,
-        confidence: f.confidence,
-        wouldBuild: f.wouldBuild,
+        startupId: startups[index].id,
+        willWork: form.willWork,
+        reasoning: form.reasoning,
+        biggestRisk: form.biggestRisk,
+        confidence: form.confidence,
+        wouldBuild: form.wouldBuild,
       }),
     });
-    if (!res.ok) throw new Error('Submit failed');
-    const data = await res.json();
+    if (!response.ok) throw new Error('Submit failed');
+    const data = await response.json();
 
-    clearInterval(evalTimer);
-    evals[idx] = f;
-    critiques[idx] = data.critique;
-    delete formState[idx];
+    clearInterval(buttonTimer);
+    evaluations[index] = form;
+    critiques[index] = data.critique;
+    delete formState[index];
     saveDrafts();
     showCardView();
-  } catch (e) {
-    clearInterval(evalTimer);
-    btn.disabled = false;
-    btn.textContent = 'Submit & Get Critique';
-    showError(e.message);
+  } catch (error) {
+    clearInterval(buttonTimer);
+    submitButton.disabled = false;
+    submitButton.textContent = 'Submit & Get Critique';
+    showError(error.message);
   }
 }
 
-// ─── Render Results ─────────────────────────────────────────────────────────
-function renderEvalSummary(idx) {
-  const ev = evals[idx];
-  const verdictColor = ev.willWork === 'yes' ? 'var(--green)' : ev.willWork === 'no' ? 'var(--red)' : 'var(--yellow)';
-  const buildColor = ev.wouldBuild === 'yes' ? 'var(--green)' : 'var(--text-dim)';
+function renderEvalSummary(index) {
+  const evaluation = evaluations[index];
+  const buildColorClass = evaluation.wouldBuild === 'yes' ? 'text-green' : 'text-dim';
 
   return `
     <div class="card eval-summary">
       <div class="eval-title">Your Eval</div>
       <div class="meta">
-        <span class="verdict" style="color:${verdictColor}">Will work: ${ev.willWork}</span>
-        <span class="risk-badge risk-${ev.biggestRisk}">${(ev.biggestRisk||'').replace('_',' ')}</span>
-        <span style="font-size:12px;color:var(--text-dim)">Confidence: ${ev.confidence}/5</span>
-        <span style="font-size:12px;color:${buildColor}">Would build: ${ev.wouldBuild}</span>
+        <span class="verdict ${getVerdictColorClass(evaluation.willWork)}">Will work: ${evaluation.willWork}</span>
+        <span class="risk-badge risk-${evaluation.biggestRisk}">${formatRisk(evaluation.biggestRisk)}</span>
+        <span class="small-note text-dim">Confidence: ${evaluation.confidence}/5</span>
+        <span class="small-note ${buildColorClass}">Would build: ${evaluation.wouldBuild}</span>
       </div>
-      <div class="reasoning">${esc(ev.reasoning)}</div>
+      <div class="reasoning">${escapeHtml(evaluation.reasoning)}</div>
     </div>
   `;
 }
 
-function renderCritique(c) {
-  const agreesClass = c.agrees ? 'agrees' : 'disagrees';
-  const agreesText = c.agrees ? 'AGREES' : 'DISAGREES';
-  const blindspots = (c.blindSpots || []).map(b =>
-    `<div class="blindspot-item">${esc(b)}</div>`
+function renderCritique(critique) {
+  const verdictClass = critique.agrees ? 'agrees' : 'disagrees';
+  const verdictWord = getAiVerdictWord(critique.agrees).toUpperCase();
+
+  const blindSpotItems = (critique.blindSpots || []).map(blindSpot =>
+    `<div class="blindspot-item">${escapeHtml(blindSpot)}</div>`
   ).join('');
+
+  let blindSpotsSection = '';
+  if (blindSpotItems) {
+    blindSpotsSection = `
+      <div class="critique-section">
+        <div class="critique-section-title blindspots">Blind Spots</div>
+        ${blindSpotItems}
+      </div>
+    `;
+  }
+
+  let strongestPointSection = '';
+  if (critique.strongestPoint) {
+    strongestPointSection = `
+      <div>
+        <div class="critique-section-title strongest">Strongest Point</div>
+        <div class="strongest-text">${escapeHtml(critique.strongestPoint)}</div>
+      </div>
+    `;
+  }
 
   return `
     <div class="critique">
       <div class="critique-title">AI Critique</div>
-      <div class="critique-verdict ${agreesClass}">${agreesText} - ${esc(c.verdict || '')}</div>
-      <div class="critique-body">${esc(c.mainArgument || '')}</div>
-      ${blindspots ? `
-        <div style="margin-bottom:14px">
-          <div class="critique-section-title blindspots">Blind Spots</div>
-          ${blindspots}
-        </div>
-      ` : ''}
-      ${c.strongestPoint ? `
-        <div>
-          <div class="critique-section-title strongest">Strongest Point</div>
-          <div style="font-size:14px;color:var(--text-muted);line-height:1.6">${esc(c.strongestPoint)}</div>
-        </div>
-      ` : ''}
+      <div class="critique-verdict ${verdictClass}">${verdictWord} - ${escapeHtml(critique.verdict || '')}</div>
+      <div class="critique-body">${escapeHtml(critique.mainArgument || '')}</div>
+      ${blindSpotsSection}
+      ${strongestPointSection}
     </div>
   `;
 }
 
-// ─── History ────────────────────────────────────────────────────────────────
-const historyFilters = { search: '', risk: null, agrees: null };
-
 async function loadHistory() {
-  const container = document.getElementById('history-list');
-  container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading history...</p></div>';
+  const historyList = getElement('history-list');
+  historyList.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading history...</p></div>';
   hide('history-filters');
   hide('export-btn');
 
   try {
-    const res = await fetch('/api/history');
-    const data = await res.json();
+    const response = await fetch('/api/history');
+    const data = await response.json();
 
     if (!data.sessions || data.sessions.length === 0) {
-      container.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px 0">No past evaluations yet.</p>';
+      historyList.innerHTML = '<p class="empty-message">No past evaluations yet.</p>';
       return;
     }
 
@@ -994,52 +1088,61 @@ async function loadHistory() {
     show('history-filters');
     show('export-btn');
     clearHistoryFilters();
-  } catch (e) {
-    container.innerHTML = `<p style="color:var(--red)">Failed to load history: ${esc(e.message)}</p>`;
+  } catch (error) {
+    historyList.innerHTML = `<p class="text-red">Failed to load history: ${escapeHtml(error.message)}</p>`;
   }
 }
 
+function renderHistoryItem(startup) {
+  const evaluation = startup.eval;
+
+  let reasoning = '';
+  if (evaluation) {
+    reasoning = `<p class="history-reasoning">${escapeHtml(evaluation.reasoning)}</p>`;
+  }
+
+  return `
+    <div class="history-item">
+      <div class="history-item-header">
+        <span class="history-item-name">${escapeHtml(startup.name)}</span>
+        <div class="history-item-verdicts">
+          ${renderVerdictBadges(evaluation, startup.critique)}
+        </div>
+      </div>
+      ${reasoning}
+    </div>
+  `;
+}
+
 function renderFilteredHistory(sessions) {
-  const container = document.getElementById('history-list');
+  const historyList = getElement('history-list');
+
   if (!sessions.length) {
-    container.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:40px 0">No matches.</p>';
+    historyList.innerHTML = '<p class="empty-message">No matches.</p>';
     return;
   }
-  container.innerHTML = sessions.map(session => `
-    <div style="margin-bottom:32px">
+
+  historyList.innerHTML = sessions.map(session => `
+    <div class="history-session">
       <div class="history-date">${session.date}</div>
-      ${session.startups.map(s => {
-        const ev = s.eval;
-        const cr = s.critique;
-        const verdictColor = ev?.willWork === 'yes' ? 'var(--green)' : ev?.willWork === 'no' ? 'var(--red)' : 'var(--yellow)';
-        return `
-          <div class="history-item">
-            <div class="history-item-header">
-              <span class="history-item-name">${esc(s.name)}</span>
-              <div class="history-item-verdicts">
-                ${ev ? `<span style="color:${verdictColor}">You: ${ev.willWork}</span>` : ''}
-                ${cr ? `<span style="color:${cr.agrees ? 'var(--green)' : 'var(--red)'}">AI: ${cr.agrees ? 'agrees' : 'disagrees'}</span>` : ''}
-              </div>
-            </div>
-            ${ev ? `<p style="font-size:13px;color:var(--text-muted);line-height:1.5">${esc(ev.reasoning)}</p>` : ''}
-          </div>
-        `;
-      }).join('')}
+      ${session.startups.map(renderHistoryItem).join('')}
     </div>
   `).join('');
 }
 
-function toggleFilter(el) {
-  const filterType = el.dataset.filter;
-  const val = el.dataset.val;
-  const wasActive = el.classList.contains('active');
-  document.querySelectorAll(`.filter-pill[data-filter="${filterType}"]`).forEach(p => p.classList.remove('active'));
+function toggleFilter(filterButton) {
+  const filterType = filterButton.dataset.filter;
+  const wasActive = filterButton.classList.contains('active');
+
+  document.querySelectorAll(`.filter-pill[data-filter="${filterType}"]`).forEach(button => button.classList.remove('active'));
+
   if (wasActive) {
     historyFilters[filterType] = null;
   } else {
-    el.classList.add('active');
-    historyFilters[filterType] = val;
+    filterButton.classList.add('active');
+    historyFilters[filterType] = filterButton.dataset.val;
   }
+
   applyHistoryFilters();
 }
 
@@ -1047,81 +1150,101 @@ function clearHistoryFilters() {
   historyFilters.search = '';
   historyFilters.risk = null;
   historyFilters.agrees = null;
-  const searchInput = document.getElementById('history-search');
+
+  const searchInput = getElement('history-search');
   if (searchInput) searchInput.value = '';
-  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+
+  document.querySelectorAll('.filter-pill').forEach(button => button.classList.remove('active'));
   applyHistoryFilters();
 }
 
-function applyHistoryFilters() {
-  const search = (document.getElementById('history-search')?.value || '').toLowerCase().trim();
-  historyFilters.search = search;
+function matchesHistoryFilters(startup, search) {
+  if (search && !startup.name.toLowerCase().includes(search)) return false;
+  if (historyFilters.risk && startup.eval?.biggestRisk !== historyFilters.risk) return false;
 
-  const filtered = historyData.map(session => {
-    const matchingStartups = session.startups.filter(s => {
-      if (search && !s.name.toLowerCase().includes(search)) return false;
-      if (historyFilters.risk && s.eval?.biggestRisk !== historyFilters.risk) return false;
-      if (historyFilters.agrees !== null) {
-        if (!s.critique) return false;
-        const aiAgreed = s.critique.agrees ? 'yes' : 'no';
-        if (aiAgreed !== historyFilters.agrees) return false;
-      }
-      return true;
-    });
-    if (!matchingStartups.length) return null;
-    return { date: session.date, startups: matchingStartups };
-  }).filter(Boolean);
+  if (historyFilters.agrees !== null) {
+    if (!startup.critique) return false;
+    const aiAgreed = startup.critique.agrees ? 'yes' : 'no';
+    if (aiAgreed !== historyFilters.agrees) return false;
+  }
 
-  renderFilteredHistory(filtered);
+  return true;
 }
 
-// ─── CSV Export ─────────────────────────────────────────────────────────────
-function csvEscape(str) {
-  if (!str) return '""';
-  str = String(str);
-  if (str.includes(',') || str.includes('"') || str.includes('\n')) {
-    return '"' + str.replace(/"/g, '""') + '"';
+function applyHistoryFilters() {
+  const search = (getElement('history-search')?.value || '').toLowerCase().trim();
+  historyFilters.search = search;
+
+  const filteredSessions = [];
+  for (const session of historyData) {
+    const matchingStartups = session.startups.filter(startup => matchesHistoryFilters(startup, search));
+    if (matchingStartups.length) {
+      filteredSessions.push({ date: session.date, startups: matchingStartups });
+    }
   }
-  return str;
+
+  renderFilteredHistory(filteredSessions);
+}
+
+function csvEscape(value) {
+  if (!value) return '""';
+  value = String(value);
+  const needsQuotes = value.includes(',') || value.includes('"') || value.includes('\n');
+  if (needsQuotes) {
+    return '"' + value.replace(/"/g, '""') + '"';
+  }
+  return value;
+}
+
+function makeCsvRow(date, startup) {
+  const evaluation = startup.eval;
+  const critique = startup.critique;
+
+  let aiAgrees = '';
+  let aiVerdict = '';
+  if (critique) {
+    aiAgrees = critique.agrees ? 'yes' : 'no';
+    aiVerdict = csvEscape(critique.verdict);
+  }
+
+  return [
+    date,
+    csvEscape(startup.name),
+    evaluation.willWork,
+    csvEscape(evaluation.reasoning),
+    evaluation.biggestRisk,
+    evaluation.confidence,
+    evaluation.wouldBuild,
+    aiAgrees,
+    aiVerdict,
+  ].join(',');
+}
+
+function downloadFile(text, fileName) {
+  const blob = new Blob([text], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = fileName;
+  link.click();
+  URL.revokeObjectURL(url);
 }
 
 function exportCSV() {
   if (!historyData.length) return;
-  const headers = ['date','startupName','willWork','reasoning','biggestRisk','confidence','wouldBuild','aiAgrees','aiVerdict'];
+
+  const headers = ['date', 'startupName', 'willWork', 'reasoning', 'biggestRisk', 'confidence', 'wouldBuild', 'aiAgrees', 'aiVerdict'];
   const rows = [headers.join(',')];
+
   historyData.forEach(session => {
-    session.startups.forEach(s => {
-      const ev = s.eval;
-      const cr = s.critique;
-      if (!ev) return;
-      rows.push([
-        session.date,
-        csvEscape(s.name),
-        ev.willWork,
-        csvEscape(ev.reasoning),
-        ev.biggestRisk,
-        ev.confidence,
-        ev.wouldBuild,
-        cr ? (cr.agrees ? 'yes' : 'no') : '',
-        cr ? csvEscape(cr.verdict) : ''
-      ].join(','));
+    session.startups.forEach(startup => {
+      if (startup.eval) {
+        rows.push(makeCsvRow(session.date, startup));
+      }
     });
   });
-  const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `startup-evals-${todayStr}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
 
-// ─── Escape HTML ────────────────────────────────────────────────────────────
-function esc(s) {
-  if (!s) return '';
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
+  downloadFile(rows.join('\n'), `startup-evals-${todayText}.csv`);
 }
 </script>
 
