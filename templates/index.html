@@ -484,6 +484,15 @@ function escapeHtml(text) {
   return helper.innerHTML;
 }
 
+async function readErrorMessage(response, fallbackMessage) {
+  try {
+    const data = await response.json();
+    return data.error || fallbackMessage;
+  } catch (error) {
+    return fallbackMessage;
+  }
+}
+
 function plural(count) {
   if (count === 1) return '';
   return 's';
@@ -851,7 +860,7 @@ async function fetchStartups() {
 
   try {
     const response = await fetch('/api/fetch', { method: 'POST' });
-    if (!response.ok) throw new Error('Fetch failed: ' + response.status);
+    if (!response.ok) throw new Error(await readErrorMessage(response, 'Fetch failed: ' + response.status));
     const data = await response.json();
 
     startups = data.startups;
@@ -995,7 +1004,7 @@ async function submitEval(index) {
         wouldBuild: form.wouldBuild,
       }),
     });
-    if (!response.ok) throw new Error('Submit failed');
+    if (!response.ok) throw new Error(await readErrorMessage(response, 'Submit failed'));
     const data = await response.json();
 
     clearInterval(buttonTimer);

@@ -1,6 +1,8 @@
 import json
+import logging
 import os
 import sqlite3
+import time
 from datetime import date, datetime
 from pathlib import Path
 
@@ -11,13 +13,29 @@ from groq import Groq
 
 load_dotenv()
 
+logging.basicConfig(format="%(asctime)s [%(levelname)s] %(message)s", level=logging.INFO)
+logger = logging.getLogger("startupEval")
+
 groqApiKey = os.environ["GROQ_API_KEY"]
 groqModel = os.getenv("GROQ_MODEL", "qwen/qwen3.6-27b")
-databasePath = Path(__file__).parent / "startup_eval.db"
+projectFolder = Path(__file__).parent
+databasePath = projectFolder / "startup_eval.db"
 hackerNewsApiUrl = "https://hacker-news.firebaseio.com/v0"
 
 app = Flask(__name__)
 groqClient = Groq(api_key=groqApiKey)
+
+
+def readPrompt(fileName):
+    return (projectFolder / "prompts" / fileName).read_text(encoding="utf-8")
+
+
+pickStartupsInstructions = readPrompt("pickStartups.txt")
+critiqueInstructions = readPrompt("critique.txt")
+
+
+class AiError(Exception):
+    pass
 
 
 def getDatabase():
@@ -87,7 +105,7 @@ def fetchShowHackerNews(limit=20):
         storyIdsResponse = requests.get(f"{hackerNewsApiUrl}/showstories.json", timeout=10)
         storyIds = storyIdsResponse.json()[:limit]
     except Exception as error:
-        print(f"HN fetch error: {error}")
+        logger.warning(f"HN fetch error: {error}")
         return []
 
     stories = []
@@ -114,65 +132,82 @@ def fetchShowHackerNews(limit=20):
     return stories
 
 
-def askGroqForJson(messages, temperature=0.7):
-    response = groqClient.chat.completions.create(
-        model=groqModel,
-        messages=messages,
-        temperature=temperature,
-        max_tokens=4000,
-        response_format={"type": "json_object"},
-        extra_body={"reasoning_effort": "none"},
-    )
-    replyText = response.choices[0].message.content
-    return json.loads(replyText)
+def askGroqForJson(taskName, messages, temperature=0.7):
+    startTime = time.time()
+    try:
+        response = groqClient.chat.completions.create(
+            model=groqModel,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=4000,
+            response_format={"type": "json_object"},
+            extra_body={"reasoning_effort": "none"},
+        )
+        parsedReply = json.loads(response.choices[0].message.content)
+    except Exception as error:
+        logger.warning(f"AI call '{taskName}' failed: [{type(error).__name__}] {str(error)[:200]}")
+        raise AiError("The AI service failed. Please try again.") from error
+
+    secondsTaken = time.time() - startTime
+    usage = response.usage
+    if usage:
+        logger.info(
+            f"AI call '{taskName}': {secondsTaken:.1f}s, "
+            f"{usage.prompt_tokens} prompt tokens, {usage.completion_tokens} reply tokens"
+        )
+
+    if not isinstance(parsedReply, dict):
+        raise AiError("The AI returned an unexpected answer. Please try again.")
+    return parsedReply
 
 
-pickStartupsInstructions = """You are a startup analyst. You receive Show HN posts from Hacker News. Your job:
+def readText(item, fieldName, maxLength):
+    value = item.get(fieldName)
+    if not isinstance(value, str):
+        return ""
+    return value.strip()[:maxLength]
 
-1. From the HN posts, identify any that are actual startups or products (not articles, questions, or libraries with no commercial intent).
-2. Additionally, recall 2-3 recent notable YC-funded startups from recent YC batches (W25, S24, W24) that you know about. These should be real companies.
-3. From ALL candidates, select exactly 3 that are the most interesting to evaluate as businesses.
 
-Return ONLY valid JSON:
-{
-  "startups": [
-    {
-      "name": "string",
-      "summary": "One sentence summary",
-      "url": "source URL",
-      "source": "Hacker News" or "YC W25" etc,
-      "problem": "What problem it solves",
-      "businessModel": "How it makes money",
-      "keyBet": "The core assumption that must be true for this to work"
+def cleanStartup(item):
+    if not isinstance(item, dict):
+        return None
+
+    startup = {
+        "name": readText(item, "name", 200),
+        "summary": readText(item, "summary", 500),
+        "url": readText(item, "url", 500),
+        "source": readText(item, "source", 100) or "Hacker News",
+        "problem": readText(item, "problem", 1000),
+        "businessModel": readText(item, "businessModel", 1000),
+        "keyBet": readText(item, "keyBet", 1000),
     }
-  ]
-}
 
-Pick diverse startups (not all same category). Prefer ones where reasonable people could disagree on viability."""
+    requiredFields = ["name", "summary", "problem", "businessModel", "keyBet"]
+    for fieldName in requiredFields:
+        if not startup[fieldName]:
+            return None
+    return startup
 
 
-critiqueInstructions = """You are a brutally honest startup investor who has seen 10,000 pitches. A user evaluated a startup. Your job: find the weakest part of their reasoning and attack it.
+def cleanCritique(reply):
+    blindSpots = []
+    rawBlindSpots = reply.get("blindSpots")
+    if isinstance(rawBlindSpots, list):
+        for blindSpot in rawBlindSpots:
+            if isinstance(blindSpot, str) and blindSpot.strip():
+                blindSpots.append(blindSpot.strip()[:1000])
 
-Rules:
-- DO NOT be diplomatic. Be specific and concrete.
-- If they're right, say so in one sentence, then tell them what they STILL got wrong or missed.
-- If they're wrong, explain exactly why with specific evidence or analogies to real companies.
-- Never praise them for "identifying X as a risk" — that's empty. Instead, tell them whether their risk assessment is actually correct and why.
-- Reference specific companies, markets, or patterns when making your case. "There's market demand" is weak. "Citus was acquired by Microsoft for $X because Postgres scaling is a $Y market" is strong.
-- Your blindSpots should be specific factual gaps, not vague reframings of their point.
-- Your strongestPoint should explain WHY it's strong, not just restate it.
-- Vary your structure. Don't follow the same pattern every time.
-- If the user gave a lazy one-liner evaluation, call that out. They need to think harder.
-- If the user is directionally right but for the wrong reasons, that's more interesting than being flat wrong. Say so.
+    critique = {
+        "agrees": reply.get("agrees") is True,
+        "verdict": readText(reply, "verdict", 500),
+        "mainArgument": readText(reply, "mainArgument", 3000),
+        "blindSpots": blindSpots[:5],
+        "strongestPoint": readText(reply, "strongestPoint", 1500),
+    }
 
-Return ONLY valid JSON:
-{
-  "agrees": true/false,
-  "verdict": "short, punchy — your actual take on the startup, not on their eval",
-  "mainArgument": "2-4 sentences. Be concrete. Name companies, cite patterns, use numbers if you know them. Attack the weakest link in their reasoning.",
-  "blindSpots": ["2-3 SPECIFIC things they missed — not generic reframings. Each should contain a concrete fact, comparison, or question they failed to ask."],
-  "strongestPoint": "What they got right AND why it matters. If nothing was strong, say so."
-}"""
+    if not critique["verdict"] and not critique["mainArgument"]:
+        raise AiError("The AI returned an empty critique. Please try again.")
+    return critique
 
 
 def pickStartups(hackerNewsStories):
@@ -190,7 +225,18 @@ def pickStartups(hackerNewsStories):
         {"role": "system", "content": pickStartupsInstructions},
         {"role": "user", "content": userMessage},
     ]
-    return askGroqForJson(messages, temperature=0.8)
+    reply = askGroqForJson("pickStartups", messages, temperature=0.8)
+
+    rawStartups = reply.get("startups")
+    if not isinstance(rawStartups, list):
+        rawStartups = []
+
+    startups = []
+    for item in rawStartups:
+        startup = cleanStartup(item)
+        if startup:
+            startups.append(startup)
+    return startups[:3]
 
 
 def generateCritique(startup, userEvaluation):
@@ -215,7 +261,8 @@ Critique their evaluation. Return JSON only."""
         {"role": "system", "content": critiqueInstructions},
         {"role": "user", "content": userMessage},
     ]
-    return askGroqForJson(messages)
+    reply = askGroqForJson("critique", messages)
+    return cleanCritique(reply)
 
 
 def loadStartupWithEvaluation(database, startupRow):
@@ -268,15 +315,21 @@ def getTodaysStartups():
 
 @app.route("/api/fetch", methods=["POST"])
 def fetchNewStartups():
+    hackerNewsStories = fetchShowHackerNews()
+    if not hackerNewsStories:
+        return jsonify({"error": "Could not load Hacker News. Please try again."}), 502
+
+    try:
+        chosenStartups = pickStartups(hackerNewsStories)
+    except AiError as error:
+        return jsonify({"error": str(error)}), 502
+
+    if not chosenStartups:
+        return jsonify({"error": "The AI did not return any usable startups. Please try again."}), 502
+
     database = getDatabase()
     today = date.today().isoformat()
-
     database.execute("DELETE FROM startups WHERE batchDate = ?", (today,))
-    database.commit()
-
-    hackerNewsStories = fetchShowHackerNews()
-    aiResult = pickStartups(hackerNewsStories)
-    chosenStartups = aiResult.get("startups", [])[:3]
 
     savedStartups = []
     for startup in chosenStartups:
@@ -287,8 +340,8 @@ def fetchNewStartups():
                 today,
                 startup["name"],
                 startup["summary"],
-                startup.get("url", ""),
-                startup.get("source", ""),
+                startup["url"],
+                startup["source"],
                 startup["problem"],
                 startup["businessModel"],
                 startup["keyBet"],
@@ -329,6 +382,11 @@ def submitEvaluation():
         return jsonify({"error": "Startup not found"}), 404
     startup = dict(startupRow)
 
+    try:
+        critique = generateCritique(startup, userEvaluation)
+    except AiError as error:
+        return jsonify({"error": str(error)}), 502
+
     cursor = database.execute(
         """INSERT INTO evals (startupId, willWork, reasoning, biggestRisk, confidence, wouldBuild, submittedAt)
            VALUES (?, ?, ?, ?, ?, ?, ?)""",
@@ -343,12 +401,8 @@ def submitEvaluation():
         ),
     )
     evaluationId = cursor.lastrowid
-    database.commit()
 
-    critique = generateCritique(startup, userEvaluation)
-    blindSpots = critique.get("blindSpots", [])
-
-    if critique.get("agrees"):
+    if critique["agrees"]:
         agreesNumber = 1
     else:
         agreesNumber = 0
@@ -359,15 +413,14 @@ def submitEvaluation():
         (
             evaluationId,
             agreesNumber,
-            critique.get("verdict", ""),
-            critique.get("mainArgument", ""),
-            json.dumps(blindSpots),
-            critique.get("strongestPoint", ""),
+            critique["verdict"],
+            critique["mainArgument"],
+            json.dumps(critique["blindSpots"]),
+            critique["strongestPoint"],
         ),
     )
     database.commit()
 
-    critique["blindSpots"] = blindSpots
     return jsonify({"evalId": evaluationId, "critique": critique})
 
 
