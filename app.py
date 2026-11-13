@@ -12,7 +12,7 @@ from groq import Groq
 load_dotenv()
 
 groqApiKey = os.environ["GROQ_API_KEY"]
-groqModel = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+groqModel = os.getenv("GROQ_MODEL", "qwen/qwen3.6-27b")
 databasePath = Path(__file__).parent / "startup_eval.db"
 hackerNewsApiUrl = "https://hacker-news.firebaseio.com/v0"
 
@@ -121,6 +121,7 @@ def askGroqForJson(messages, temperature=0.7):
         temperature=temperature,
         max_tokens=4000,
         response_format={"type": "json_object"},
+        extra_body={"reasoning_effort": "none"},
     )
     replyText = response.choices[0].message.content
     return json.loads(replyText)

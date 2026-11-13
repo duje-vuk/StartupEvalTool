@@ -31,7 +31,7 @@ All config is via environment variables (or `.env` file):
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `GROQ_API_KEY` | Yes | — | Your Groq API key |
-| `GROQ_MODEL` | No | `llama-3.3-70b-versatile` | Groq model to use |
+| `GROQ_MODEL` | No | `qwen/qwen3.6-27b` | Groq model to use |
 | `FLASK_DEBUG` | No | `0` | Set to `1` for debug mode |
 | `PORT` | No | `5000` | Server port |
 
