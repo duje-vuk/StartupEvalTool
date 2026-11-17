@@ -25,7 +25,6 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
-*_original_backup*
 .claude/
 .pytest_cache/
 .ruff_cache/
