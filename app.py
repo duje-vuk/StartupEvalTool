@@ -55,7 +55,7 @@ def closeDatabase(error):
 def createTables():
     database = sqlite3.connect(str(databasePath))
 
-    database.execute("""
+    database.executescript("""
         CREATE TABLE IF NOT EXISTS startups (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             batchDate TEXT NOT NULL,
@@ -66,10 +66,8 @@ def createTables():
             problem TEXT,
             businessModel TEXT,
             keyBet TEXT
-        )
-    """)
+        );
 
-    database.execute("""
         CREATE TABLE IF NOT EXISTS evals (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             startupId INTEGER NOT NULL,
@@ -80,10 +78,8 @@ def createTables():
             wouldBuild TEXT,
             submittedAt TEXT,
             FOREIGN KEY (startupId) REFERENCES startups(id)
-        )
-    """)
+        );
 
-    database.execute("""
         CREATE TABLE IF NOT EXISTS critiques (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             evalId INTEGER NOT NULL,
@@ -93,7 +89,7 @@ def createTables():
             blindSpots TEXT,
             strongestPoint TEXT,
             FOREIGN KEY (evalId) REFERENCES evals(id)
-        )
+        );
     """)
 
     database.commit()
@@ -212,11 +208,9 @@ def cleanCritique(reply):
 
 def pickStartups(hackerNewsStories):
     storyDescriptions = []
-    storyNumber = 1
-    for story in hackerNewsStories[:15]:
+    for storyNumber, story in enumerate(hackerNewsStories[:15], start=1):
         description = f'{storyNumber}. "{story["title"]}" ({story["url"]}) — {story["score"]} pts\n{story["text"]}'
         storyDescriptions.append(description)
-        storyNumber += 1
 
     allStoriesText = "\n\n".join(storyDescriptions)
     userMessage = f"Today's Show HN posts:\n\n{allStoriesText}\n\nSelect the 3 most interesting startups to evaluate. Return JSON only."
@@ -402,17 +396,12 @@ def submitEvaluation():
     )
     evaluationId = cursor.lastrowid
 
-    if critique["agrees"]:
-        agreesNumber = 1
-    else:
-        agreesNumber = 0
-
     database.execute(
         """INSERT INTO critiques (evalId, agrees, verdict, mainArgument, blindSpots, strongestPoint)
            VALUES (?, ?, ?, ?, ?, ?)""",
         (
             evaluationId,
-            agreesNumber,
+            int(critique["agrees"]),
             critique["verdict"],
             critique["mainArgument"],
             json.dumps(critique["blindSpots"]),

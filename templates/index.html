@@ -9,14 +9,12 @@
   :root {
     --bg: #f5f5f0;
     --surface: #ffffff;
-    --surface-hover: #faf8f5;
     --border: #e0ddd5;
     --border-active: #c0bdb5;
     --text: #1a1a1a;
     --text-muted: #6b6b6b;
     --text-dim: #999999;
     --accent: #FF6600;
-    --accent-dim: #cc5200;
     --green: #16a34a;
     --red: #dc3545;
     --yellow: #e8a317;
@@ -71,13 +69,12 @@
     display: flex; justify-content: center; align-items: center;
     gap: 12px; margin-bottom: 24px;
   }
-  .progress-dot {
-    width: 36px; height: 36px; border-radius: 50%;
-    border: 2px solid var(--border); background: transparent;
+  .progress-dot, .dot {
+    border-radius: 50%; border: 2px solid var(--border); background: transparent;
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 600; color: var(--text-dim);
-    cursor: pointer; transition: all 0.2s; position: relative;
+    font-size: 13px; font-weight: 600; color: var(--text-dim); cursor: pointer;
   }
+  .progress-dot { width: 36px; height: 36px; transition: all 0.2s; position: relative; }
   .progress-dot.active {
     border-color: var(--accent); color: var(--accent);
     box-shadow: 0 0 0 3px rgba(255,102,0,0.15);
@@ -85,19 +82,15 @@
   .progress-dot.done {
     border-color: var(--green); background: var(--green); color: #fff;
   }
-  .progress-dot.done::after {
-    content: ''; display: none;
-  }
   .progress-line {
     width: 40px; height: 2px; background: var(--border); border-radius: 1px;
   }
   .progress-line.done { background: var(--green); }
 
-  .empty { text-align: center; padding: 80px 0; }
+  .empty, .loading { text-align: center; padding: 80px 0; }
   .empty .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
   .empty p { color: var(--text-muted); font-size: 15px; margin-bottom: 32px; }
 
-  .loading { text-align: center; padding: 80px 0; }
   .spinner {
     width: 24px; height: 24px;
     border: 2px solid var(--border);
@@ -121,19 +114,22 @@
     cursor: pointer; font-size: 16px;
   }
 
-  .card {
+  .card, .eval-form {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 24px; margin-bottom: 4px;
+    border-radius: 12px; padding: 24px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.05);
   }
+  .card { margin-bottom: 4px; }
+  .eval-form { animation: fadeIn 0.25s ease; }
   .card-header {
     display: flex; align-items: flex-start;
     justify-content: space-between; margin-bottom: 12px;
   }
-  .card-source {
+  .card-source, .eval-title, .critique-title {
     font-size: 11px; color: var(--accent);
-    letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700;
   }
+  .card-source { font-weight: 600; }
   .card-name {
     font-size: 22px; color: var(--text);
     margin: 4px 0 0; font-weight: 700; line-height: 1.3;
@@ -160,34 +156,25 @@
   }
   .card-value { font-size: 14px; color: var(--text); line-height: 1.5; }
 
-  .eval-form {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 24px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    animation: fadeIn 0.25s ease;
-  }
-  .eval-title {
-    font-size: 11px; color: var(--accent);
-    letter-spacing: 1.5px; text-transform: uppercase;
-    margin-bottom: 20px; font-weight: 700;
-  }
+  .eval-title { margin-bottom: 20px; }
   .field { margin-bottom: 18px; }
   .field-label {
     font-size: 14px; color: var(--text);
     margin-bottom: 8px; font-weight: 600;
   }
   .pills { display: flex; gap: 8px; flex-wrap: wrap; }
-  .pill {
-    padding: 8px 18px; border-radius: 8px; font-size: 14px;
+  .pill, .filter-pill {
     font-weight: 500; border: 1px solid var(--border);
     background: transparent; color: var(--text-muted);
     cursor: pointer; transition: all 0.15s;
   }
-  .pill.active {
+  .pill { padding: 8px 18px; border-radius: 8px; font-size: 14px; }
+  .filter-pill { padding: 5px 12px; border-radius: 4px; font-size: 11px; }
+  .pill.active, .filter-pill.active {
     border-color: var(--accent); background: rgba(255,102,0,0.08);
     color: var(--accent);
   }
-  .pill:hover:not(.active) { border-color: var(--border-active); }
+  .pill:hover:not(.active), .filter-pill:hover:not(.active) { border-color: var(--border-active); }
   textarea {
     width: 100%; padding: 12px 16px; background: var(--surface);
     border: 1px solid var(--border); border-radius: 8px;
@@ -198,13 +185,7 @@
   textarea:focus { border-color: var(--accent); }
 
   .confidence-dots { display: flex; gap: 8px; }
-  .dot {
-    width: 32px; height: 32px; border-radius: 50%;
-    border: 2px solid var(--border); background: transparent;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 600; color: var(--text-dim);
-    cursor: pointer; transition: all 0.15s;
-  }
+  .dot { width: 32px; height: 32px; transition: all 0.15s; }
   .dot.active {
     background: var(--accent); border-color: var(--accent); color: #fff;
   }
@@ -236,11 +217,7 @@
     box-shadow: 0 1px 4px rgba(0,0,0,0.05);
     animation: slideIn 0.3s ease;
   }
-  .critique-title {
-    font-size: 11px; color: var(--accent);
-    letter-spacing: 1.5px; text-transform: uppercase;
-    margin-bottom: 14px; font-weight: 700;
-  }
+  .critique-title { margin-bottom: 14px; }
   .critique-verdict {
     display: inline-block; padding: 4px 12px; border-radius: 6px;
     font-size: 13px; font-weight: 600; margin-bottom: 14px;
@@ -350,17 +327,6 @@
     letter-spacing: 1px; text-transform: uppercase;
     margin-right: 4px; font-weight: 600;
   }
-  .filter-pill {
-    padding: 5px 12px; border-radius: 4px;
-    font-size: 11px; font-weight: 500;
-    border: 1px solid var(--border); background: transparent;
-    color: var(--text-muted); cursor: pointer; transition: all 0.15s;
-  }
-  .filter-pill.active {
-    border-color: var(--accent);
-    background: rgba(255,102,0,0.08); color: var(--accent);
-  }
-  .filter-pill:hover:not(.active) { border-color: var(--border-active); }
 
   @media (max-width: 640px) {
     .container { padding: 16px; }
@@ -462,7 +428,7 @@ const todayText = new Date().toISOString().slice(0, 10);
 const draftKeyPrefix = 'startup-eval-draft-';
 const draftStorageKey = draftKeyPrefix + todayText;
 const formState = {};
-const historyFilters = { search: '', risk: null, agrees: null };
+const historyFilters = { risk: null, agrees: null };
 const scrollToTopSmoothly = { top: 0, behavior: 'smooth' };
 
 function getElement(id) {
@@ -600,10 +566,8 @@ function restoreDrafts() {
 
 let loadingTimer = null;
 
-function startLoadingTimer(elementId, estimatedSeconds) {
-  const timerElement = getElement(elementId);
-  if (!timerElement) return;
-
+function startLoadingTimer(estimatedSeconds) {
+  const timerElement = getElement('loading-timer');
   const startTime = Date.now();
   timerElement.textContent = `~${estimatedSeconds}s estimated`;
 
@@ -618,8 +582,7 @@ function stopLoadingTimer() {
     clearInterval(loadingTimer);
     loadingTimer = null;
   }
-  const timerElement = getElement('loading-timer');
-  if (timerElement) timerElement.textContent = '';
+  getElement('loading-timer').textContent = '';
 }
 
 getElement('today-date').textContent =
@@ -719,6 +682,10 @@ function renderProgress() {
   getElement('progress-bar').innerHTML = html;
 }
 
+function renderCardField(label, value, className = '') {
+  return `<div class="${className}"><div class="card-label">${label}</div><div class="card-value">${escapeHtml(value)}</div></div>`;
+}
+
 function renderStartupCard(startup) {
   let sourceLink = '';
   if (startup.url) {
@@ -736,18 +703,9 @@ function renderStartupCard(startup) {
       </div>
       <div class="card-summary">${escapeHtml(startup.summary)}</div>
       <div class="card-grid">
-        <div>
-          <div class="card-label">Problem</div>
-          <div class="card-value">${escapeHtml(startup.problem)}</div>
-        </div>
-        <div>
-          <div class="card-label">Business Model</div>
-          <div class="card-value">${escapeHtml(startup.businessModel)}</div>
-        </div>
-        <div class="full">
-          <div class="card-label">Key Bet</div>
-          <div class="card-value">${escapeHtml(startup.keyBet)}</div>
-        </div>
+        ${renderCardField('Problem', startup.problem)}
+        ${renderCardField('Business Model', startup.businessModel)}
+        ${renderCardField('Key Bet', startup.keyBet, 'full')}
       </div>
     </div>
     <div class="spacer"></div>
@@ -759,7 +717,7 @@ function renderNavigation(index) {
 
   let backButton = emptySlot;
   if (index > 0) {
-    backButton = '<button class="btn" onclick="goPrev()">&#8592; Previous</button>';
+    backButton = `<button class="btn" onclick="goTo(${index - 1})">&#8592; Previous</button>`;
   }
 
   let forwardButton = emptySlot;
@@ -767,7 +725,7 @@ function renderNavigation(index) {
   const isLastStartup = index === startups.length - 1;
 
   if (isAnswered && !isLastStartup) {
-    forwardButton = '<button class="btn btn-primary" onclick="goNext()">Next &#8594;</button>';
+    forwardButton = `<button class="btn btn-primary" onclick="goTo(${index + 1})">Next &#8594;</button>`;
   } else if (isAnswered && allStartupsCritiqued()) {
     forwardButton = '<button class="btn btn-primary" onclick="showCardView()">See Results</button>';
   }
@@ -806,14 +764,6 @@ function goTo(index) {
   }
 }
 
-function goNext() {
-  goTo(currentIndex + 1);
-}
-
-function goPrev() {
-  goTo(currentIndex - 1);
-}
-
 function renderDoneScreen() {
   let agreements = 0;
   for (const critique of Object.values(critiques)) {
@@ -841,7 +791,7 @@ function renderDoneScreen() {
   html += `
     <div class="done-actions">
       <button class="btn" onclick="showHistory()">View History</button>
-      <button class="btn btn-primary" onclick="refetch()">Fetch New Batch</button>
+      <button class="btn btn-primary" onclick="fetchStartups()">Fetch New Batch</button>
     </div>
   </div>`;
 
@@ -856,7 +806,7 @@ async function fetchStartups() {
   hide('progress-bar');
   show('loading-state');
   getElement('loading-msg').textContent = 'Fetching from HN + asking Groq to pick 3...';
-  startLoadingTimer('loading-timer', 15);
+  startLoadingTimer(15);
 
   try {
     const response = await fetch('/api/fetch', { method: 'POST' });
@@ -867,29 +817,28 @@ async function fetchStartups() {
     evaluations = {};
     critiques = {};
     currentIndex = 0;
-
-    stopLoadingTimer();
-    hide('loading-state');
     showCardView();
   } catch (error) {
-    stopLoadingTimer();
-    hide('loading-state');
     show('empty-state');
     showError(error.message);
+  } finally {
+    stopLoadingTimer();
+    hide('loading-state');
   }
-}
-
-function refetch() {
-  getElement('card-stack').innerHTML = '';
-  hide('done-screen');
-  hide('progress-bar');
-  fetchStartups();
 }
 
 function renderPills(index, field, options) {
   return options.map(option =>
     `<button class="pill" data-field="${field}" data-idx="${index}" data-val="${option}" onclick="setPill(this)">${formatRisk(option)}</button>`
   ).join('');
+}
+
+function renderPillField(label, index, field, options) {
+  return `
+      <div class="field">
+        <div class="field-label">${label}</div>
+        <div class="pills">${renderPills(index, field, options)}</div>
+      </div>`;
 }
 
 function renderEvalForm(index) {
@@ -900,31 +849,19 @@ function renderEvalForm(index) {
   return `
     <div class="eval-form" id="form-${index}">
       <div class="eval-title">Your Evaluation</div>
-
-      <div class="field">
-        <div class="field-label">Will it work?</div>
-        <div class="pills">${renderPills(index, 'willWork', ['yes', 'no', 'maybe'])}</div>
-      </div>
+      ${renderPillField('Will it work?', index, 'willWork', ['yes', 'no', 'maybe'])}
 
       <div class="field">
         <div class="field-label">Why / why not?</div>
         <textarea id="reasoning-${index}" rows="4" placeholder="Your reasoning..."></textarea>
       </div>
-
-      <div class="field">
-        <div class="field-label">Biggest risk?</div>
-        <div class="pills">${renderPills(index, 'biggestRisk', ['market_size', 'execution', 'timing', 'competition', 'regulation'])}</div>
-      </div>
+      ${renderPillField('Biggest risk?', index, 'biggestRisk', ['market_size', 'execution', 'timing', 'competition', 'regulation'])}
 
       <div class="field">
         <div class="field-label">Confidence</div>
         <div class="confidence-dots" id="conf-${index}">${confidenceDots}</div>
       </div>
-
-      <div class="field">
-        <div class="field-label">Would you build it?</div>
-        <div class="pills">${renderPills(index, 'wouldBuild', ['yes', 'no'])}</div>
-      </div>
+      ${renderPillField('Would you build it?', index, 'wouldBuild', ['yes', 'no'])}
 
       <button class="btn btn-primary btn-full-width" id="submit-${index}" onclick="submitEval(${index})" disabled>
         Submit & Get Critique
@@ -1007,17 +944,17 @@ async function submitEval(index) {
     if (!response.ok) throw new Error(await readErrorMessage(response, 'Submit failed'));
     const data = await response.json();
 
-    clearInterval(buttonTimer);
     evaluations[index] = form;
     critiques[index] = data.critique;
     delete formState[index];
     saveDrafts();
     showCardView();
   } catch (error) {
-    clearInterval(buttonTimer);
     submitButton.disabled = false;
     submitButton.textContent = 'Submit & Get Critique';
     showError(error.message);
+  } finally {
+    clearInterval(buttonTimer);
   }
 }
 
@@ -1156,7 +1093,6 @@ function toggleFilter(filterButton) {
 }
 
 function clearHistoryFilters() {
-  historyFilters.search = '';
   historyFilters.risk = null;
   historyFilters.agrees = null;
 
@@ -1182,7 +1118,6 @@ function matchesHistoryFilters(startup, search) {
 
 function applyHistoryFilters() {
   const search = (getElement('history-search')?.value || '').toLowerCase().trim();
-  historyFilters.search = search;
 
   const filteredSessions = [];
   for (const session of historyData) {
