@@ -17,7 +17,7 @@ logging.basicConfig(format="%(asctime)s [%(levelname)s] %(message)s", level=logg
 logger = logging.getLogger("startupEval")
 
 groqApiKey = os.environ["GROQ_API_KEY"]
-groqModel = os.getenv("GROQ_MODEL", "qwen/qwen3.6-27b")
+groqModel = os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b")
 projectFolder = Path(__file__).parent
 databasePath = projectFolder / "startup_eval.db"
 hackerNewsApiUrl = "https://hacker-news.firebaseio.com/v0"
